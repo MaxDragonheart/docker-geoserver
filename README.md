@@ -13,6 +13,10 @@ Run: `docker-compose -f docker-compose.yml up`
 
 Run permanently: `docker-compose -f docker-compose.yml up -d`
 
+Access to container: `docker exec -it COINTAINERID bin`
+
+Full Docke command list [here](https://docs.docker.com/engine/reference/commandline/docker/).
+
 ## Geoserver
 
 - [Extensions list](https://docs.geoserver.org/latest/en/user/extensions/index.html#extensions)
