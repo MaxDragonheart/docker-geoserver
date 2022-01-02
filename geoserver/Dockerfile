@@ -23,6 +23,9 @@ ARG GEOSERVER_DOWNLOAD_FOLDER=geoserver-${GEOSERVER_VERSION}
 ENV GEOSERVER_LINK=${GEOSERVER_LINK}
 ENV GEOSERVER_VERSION=${GEOSERVER_VERSION}
 ENV GEOSERVER_DOWNLOAD_FOLDER=${GEOSERVER_DOWNLOAD_FOLDER}
+## Miscellanea
+ARG PORT=8080/tcp
+ENV PORT=${PORT}
 
 # GIS-OS as Layer
 FROM gis-os as java_jdk
@@ -32,25 +35,36 @@ RUN apt-get install default-jdk -y
 # JAVA JDK as Layer
 FROM java_jdk as tomcat
 RUN useradd -m -d /opt/tomcat -U -s /bin/false tomcat
-
 RUN mkdir ${TOMCAT_DOWNLOAD_FOLDER}
-RUN cd ${TOMCAT_DOWNLOAD_FOLDER} \
-    && wget ${TOMCAT_LINK} \
+WORKDIR ${TOMCAT_DOWNLOAD_FOLDER}
+RUN wget ${TOMCAT_LINK} \
     && tar xzvf apache-tomcat-${TOMCAT_VERSION}.tar.gz -C /opt/tomcat --strip-components=1 ##\
-#    && ln -s /opt/tomcat/apache-tomcat-${TOMCAT_VERSION} /opt/tomcat/latest
-RUN chown -R tomcat:tomcat /opt/tomcat/
-RUN chmod -R u+x /opt/tomcat/bin
-
-#COPY script/tomcat.service /etc/systemd/system/tomcat.service
-#RUN rm -rf ${TOMCAT_DOWNLOAD_FOLDER}
+RUN chown -R tomcat:tomcat /opt/tomcat/ \
+    && chmod -R u+x /opt/tomcat/bin
+WORKDIR /
+RUN rm -rf ${TOMCAT_DOWNLOAD_FOLDER}
 #CMD ["cat", "/etc/passwd"]
 
 # TOMCAT as Layer
-#FROM tomcat as geoserver
-
-#RUN mkdir ${GEOSERVER_DOWNLOAD_FOLDER}
-#RUN cd ${GEOSERVER_DOWNLOAD_FOLDER} \
-#    && wget ${GEOSERVER_LINK} \
-#    && unzip geoserver-${GEOSERVER_VERSION}-war.zip ##\
+FROM tomcat as geoserver
+RUN mkdir ${GEOSERVER_DOWNLOAD_FOLDER}
+WORKDIR ${GEOSERVER_DOWNLOAD_FOLDER}
+RUN wget ${GEOSERVER_LINK} \
+    && unzip geoserver-${GEOSERVER_VERSION}-war.zip \
+    && cp geoserver.war /opt/tomcat/webapps
 #    && cp geoserver.war /opt/tomcat/apache-tomcat-${TOMCAT_VERSION}/webapps
-#RUN rm -rf ${GEOSERVER_DOWNLOAD_FOLDER}
+
+#FROM geoserver as geoserver_exec
+#COPY geoserver.war /opt/tomcat/apache-tomcat-${TOMCAT_VERSION}/webapps
+#COPY geoserver.war /opt/tomcat/apache-tomcat-${TOMCAT_VERSION}/webapps
+WORKDIR /
+RUN rm -rf ${GEOSERVER_DOWNLOAD_FOLDER}
+
+COPY files/tomcat-users.xml /opt/tomcat/conf
+COPY files/web.xml /opt/tomcat/conf
+#COPY files/context.xml /opt/tomcat/conf
+COPY scripts/tomcat.service /etc/systemd/system/tomcat.service
+
+EXPOSE ${PORT}
+
+CMD ["/opt/tomcat/bin/catalina.sh", "run"]
