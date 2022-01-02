@@ -426,7 +426,11 @@
     </servlet-mapping>
 -->
 
-
+  <!-- ================== Custom Context Param ===================== -->
+    <context-param>
+      <param-name>GEOSERVER_DATA_DIR</param-name>
+      <param-value>/var/lib/geoserver_data</param-value>
+    </context-param>
   <!-- ================== Built In Filter Definitions ===================== -->
 
   <!-- A filter that sets various security related HTTP Response headers.   -->
