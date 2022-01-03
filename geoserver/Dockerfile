@@ -15,29 +15,16 @@ ARG GEOSERVER_DOWNLOAD_FOLDER=geoserver-${GEOSERVER_VERSION}
 ENV GEOSERVER_VERSION=${GEOSERVER_VERSION}
 ENV GEOSERVER_DOWNLOAD_FOLDER=${GEOSERVER_DOWNLOAD_FOLDER}
 
-ARG PORT=8080/tcp
-ENV PORT=${PORT}
+ARG HTTP_PORT=8080/tcp
+ENV HTTP_PORT=${HTTP_PORT}
 
 # GIS-OS as Layer
 FROM gis-os as java_jdk
 RUN apt-get install default-jdk -y
 #CMD ["java", "-version"]
 
-### Geoserver Binary Installation
-### JAVA JDK as Layer
-#ARG GEOSERVER_HOME=/usr/share/geoserver/
-#ENV GEOSERVER_HOME=${GEOSERVER_HOME}
-#
-#FROM java_jdk as tomcat
-#RUN mkdir ${GEOSERVER_DOWNLOAD_FOLDER}
-#RUN mkdir -p ${GEOSERVER_HOME}
-#WORKDIR ${GEOSERVER_DOWNLOAD_FOLDER}
-#ARG GEOSERVER_LINK="http://sourceforge.net/projects/geoserver/files/GeoServer/${GEOSERVER_VERSION}/geoserver-${GEOSERVER_VERSION}-bin.zip"
-#ENV GEOSERVER_LINK=${GEOSERVER_LINK}
-#RUN wget ${GEOSERVER_LINK} \
-#    && unzip geoserver-${GEOSERVER_VERSION}-bin.zip
-
 ## Geoserver Web Archive Installation
+## https://docs.geoserver.org/latest/en/user/installation/war.html
 ## JAVA JDK as Layer
 ARG TOMCAT_MAJOR=9
 ARG TOMCAT_VERSION=9.0.56
@@ -74,45 +61,31 @@ WORKDIR /
 RUN rm -rf ${GEOSERVER_DOWNLOAD_FOLDER}
 COPY files/web.xml /opt/tomcat/conf
 
-EXPOSE ${PORT}
 
-CMD ["/opt/tomcat/bin/catalina.sh", "run"]
+EXPOSE ${HTTP_PORT}
+
+#CMD ["/opt/tomcat/bin/catalina.sh", "run"]
 
 
 
-#RUN useradd -m -U -d /opt/tomcat -s /bin/false tomcat
-#RUN mkdir ${TOMCAT_DOWNLOAD_FOLDER}
-#WORKDIR ${TOMCAT_DOWNLOAD_FOLDER}
-#RUN wget ${TOMCAT_LINK} \
-#    && tar xzvf apache-tomcat-${TOMCAT_VERSION}.tar.gz -C /opt/tomcat --strip-components=1
-#RUN chown -R tomcat: /opt/tomcat/ \
-#    && sh -c 'chmod +x /opt/tomcat/bin/*.sh'
+### Geoserver Binary Installation
+### JAVA JDK as Layer
+#ARG GEOSERVER_HOME=/usr/share/geoserver/
+#ENV GEOSERVER_HOME=${GEOSERVER_HOME}
+#
+#FROM java_jdk as tomcat
+#RUN mkdir ${GEOSERVER_DOWNLOAD_FOLDER}
+#RUN mkdir -p ${GEOSERVER_HOME}
+#WORKDIR ${GEOSERVER_DOWNLOAD_FOLDER}
+#ENV GEOSERVER_LINK="http://sourceforge.net/projects/geoserver/files/GeoServer/${GEOSERVER_VERSION}/geoserver-${GEOSERVER_VERSION}-bin.zip"
+#RUN wget ${GEOSERVER_LINK} \
+#    && unzip geoserver-${GEOSERVER_VERSION}-bin.zip -d ${GEOSERVER_HOME}
 #WORKDIR /
-#RUN rm -rf ${TOMCAT_DOWNLOAD_FOLDER}
-###CMD ["cat", "/etc/passwd"]
+#RUN rm -rf ${GEOSERVER_DOWNLOAD_FOLDER}
+#COPY files/web.xml /usr/share/geoserver/webapps/geoserver/WEB-INF
 #
-## TOMCAT as Layer
-##FROM tomcat as geoserver
-##RUN mkdir ${GEOSERVER_DOWNLOAD_FOLDER}
-##WORKDIR ${GEOSERVER_DOWNLOAD_FOLDER}
-##RUN wget ${GEOSERVER_LINK} \
-##    && unzip geoserver-${GEOSERVER_VERSION}-war.zip
-##    && unzip geoserver-${GEOSERVER_VERSION}-bin.zip
-##RUN cp geoserver.war /opt/tomcat/webapps
+#WORKDIR /usr/share/geoserver
 #
-##WORKDIR /
-##RUN rm -rf ${GEOSERVER_DOWNLOAD_FOLDER}
+#EXPOSE ${HTTP_PORT}
 #
-##COPY files/web.xml /opt/tomcat/conf
-#COPY files/context.xml /opt/tomcat/webapps/manager/META-INF
-#COPY files/tomcat-users.xml /opt/tomcat/conf
-#COPY scripts/tomcat.service /etc/systemd/system/tomcat.service
-#
-##COPY scripts/start_geoserver.sh /opt/tomcat/bin
-##RUN chmod +x /opt/tomcat/bin/start_geoserver.sh
-#
-##EXPOSE ${PORT}
-#
-##ENTRYPOINT ["/opt/tomcat/bin/start_geoserver.sh"]
-##CMD ["/scripts/start_geoserver.sh"]
-##CMD ["/opt/tomcat/bin/catalina.sh", "run"]
+#CMD ["/usr/share/geoserver/bin/startup.sh", "run"]
