@@ -1,0 +1,19 @@
+version: '3.7'
+
+services:
+  geoserver:
+    image: dev_geoserver:dev
+    build:
+      context: ./geoserver
+      dockerfile: Dockerfile
+    container_name: dev_geoserver
+    restart: always
+    ports:
+    - 8080:8080
+#    volumes:
+#    - geoserver-data:/usr/local/tomcat/webapps/geoserver/data
+#    - geoserver-customizations:/usr/local/tomcat/webapps/geoserver/WEB-INF
+
+#volumes:
+#  geoserver-data:
+#  geoserver-customizations:

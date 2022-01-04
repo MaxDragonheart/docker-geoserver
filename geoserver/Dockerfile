@@ -2,7 +2,7 @@
 
 # Official Geosolutions/Geoserver Image as Layer
 FROM geosolutionsit/geoserver as geoserver
-RUN mkdir geoserver_data
+#RUN mkdir geoserver_data
 
 #CMD ["pwd"]
 
