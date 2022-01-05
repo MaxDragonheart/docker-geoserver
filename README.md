@@ -23,7 +23,7 @@ Full Docke command list [here](https://docs.docker.com/engine/reference/commandl
 - [Running in a production environment](https://docs.geoserver.org/latest/en/user/production/index.html#production)
 - [GeoServer data directory](https://docs.geoserver.org/latest/en/user/datadirectory/index.html#datadir)
 
-### Install plugin
+### Install Extension
 0. Put down Geoserver:
 
         docker-compose -f docker-compose-dev.yml down
