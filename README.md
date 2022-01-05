@@ -23,6 +23,23 @@ Full Docke command list [here](https://docs.docker.com/engine/reference/commandl
 - [Running in a production environment](https://docs.geoserver.org/latest/en/user/production/index.html#production)
 - [GeoServer data directory](https://docs.geoserver.org/latest/en/user/datadirectory/index.html#datadir)
 
+### Install plugin
+0. Put down Geoserver:
+
+        docker-compose -f docker-compose-dev.yml down
+
+1. Copy `.jar` into plugin's folder:
+
+         sudo cp -R DOWNLOAD_FOLDER/* /var/lib/docker/volumes/geoserver-drako_geoserver-plugin/_data/lib
+
+2. Change `lib` ownership:
+
+        chown -R USERNAME:USERNAME lib/
+
+3. Put UP Geoserver:
+
+        sudo docker-compose -f docker-compose-dev.yml up -d
+
 ### Use earlier folder
 0. Put down Geoserver:
 
