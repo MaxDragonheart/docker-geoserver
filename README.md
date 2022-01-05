@@ -22,3 +22,28 @@ Full Docke command list [here](https://docs.docker.com/engine/reference/commandl
 - [Extensions list](https://docs.geoserver.org/latest/en/user/extensions/index.html#extensions)
 - [Running in a production environment](https://docs.geoserver.org/latest/en/user/production/index.html#production)
 - [GeoServer data directory](https://docs.geoserver.org/latest/en/user/datadirectory/index.html#datadir)
+
+### Use earlier folder
+0. Put down Geoserver:
+
+        docker-compose -f docker-compose-dev.yml down
+
+1. Delete `datadir`:
+
+        rm -rf /var/lib/docker/volumes/geoserver-drako_geoserver-data/_data/datadir
+
+2. Create `datadir`:
+
+        mkdir datadir
+
+3. Copy all data from earlier folder to `datadir`:
+
+        sudo cp -r EARLIER_FOLDER_NAME/* /var/lib/docker/volumes/geoserver-drako_geoserver-data/_data/datadir
+   
+4. Change `datadir` ownership:
+
+        chown -R USERNAME:USERNAME datadir/
+   
+5. Put UP Geoserver:
+
+        sudo docker-compose -f docker-compose-dev.yml up -d

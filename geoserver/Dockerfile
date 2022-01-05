@@ -5,7 +5,7 @@ FROM geosolutionsit/geoserver as geoserver
 
 ENV TOMCAT_CONF=/usr/local/tomcat/conf
 
-COPY files/web.xml $TOMCAT_CONF
+#COPY files/web.xml $TOMCAT_CONF
 
 #CMD ["pwd"]
 
