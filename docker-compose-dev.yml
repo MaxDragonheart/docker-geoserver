@@ -10,10 +10,10 @@ services:
     restart: always
     ports:
     - 8080:8080
-#    volumes:
-#    - geoserver-data:/usr/local/tomcat/webapps/geoserver/data
-#    - geoserver-customizations:/usr/local/tomcat/webapps/geoserver/WEB-INF
+    volumes:
+    - tomcat-conf:/usr/local/tomcat/conf
+    - geoserver-data:/var/geoserver
 
-#volumes:
-#  geoserver-data:
-#  geoserver-customizations:
+volumes:
+  tomcat-conf:
+  geoserver-data:

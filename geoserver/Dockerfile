@@ -2,7 +2,10 @@
 
 # Official Geosolutions/Geoserver Image as Layer
 FROM geosolutionsit/geoserver as geoserver
-#RUN mkdir geoserver_data
+
+ENV TOMCAT_CONF=/usr/local/tomcat/conf
+
+COPY files/web.xml $TOMCAT_CONF
 
 #CMD ["pwd"]
 
