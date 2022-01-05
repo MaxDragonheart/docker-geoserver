@@ -13,7 +13,9 @@ services:
     volumes:
     - tomcat-conf:/usr/local/tomcat/conf
     - geoserver-data:/var/geoserver
+    - geoserver-plugin:/usr/local/tomcat/webapps/geoserver/WEB-INF
 
 volumes:
   tomcat-conf:
   geoserver-data:
+  geoserver-plugin:
