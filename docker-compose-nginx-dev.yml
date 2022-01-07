@@ -1,0 +1,44 @@
+version: '3.7'
+
+services:
+  geoserver:
+    image: maxdragonheart/dev-geoserver:${GEOSERVER_VERSION}
+    build:
+      context: ./geoserver
+      dockerfile: Dockerfile
+      args:
+        GEOSERVER_VERSION: ${GEOSERVER_VERSION}
+        HTTP_PORT: ${HTTP_PORT}
+    container_name: geoserver
+    restart: always
+    ports:
+    - ${HTTP_PORT}:8080
+    volumes:
+    - tomcat:/opt/tomcat
+    - geoserver:/opt/tomcat/webapps/geoserver
+
+
+  nginx:
+    image: dev_geoserver/nginx
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
+    container_name: nginx
+    volumes:
+      - nginx-conf:/etc/nginx
+      - nginx-log:/var/log/nginx
+#      - certbot-etc:/etc/letsencrypt
+#      - certbot-var:/var/lib/letsencrypt
+    ports:
+      - 81:81
+#      - 443:443
+    depends_on:
+      - geoserver
+
+volumes:
+  tomcat:
+  geoserver:
+  nginx-conf:
+  nginx-log:
+#  certbot-etc:
+#  certbot-var:
