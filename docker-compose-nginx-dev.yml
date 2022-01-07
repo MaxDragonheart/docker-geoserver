@@ -30,7 +30,7 @@ services:
 #      - certbot-etc:/etc/letsencrypt
 #      - certbot-var:/var/lib/letsencrypt
     ports:
-      - 81:81
+      - ${HTTP_PORT}:81
 #      - 443:443
     depends_on:
       - geoserver

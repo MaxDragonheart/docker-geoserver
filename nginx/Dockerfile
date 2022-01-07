@@ -15,7 +15,9 @@ RUN apt install nginx -y \
 #RUN apt install python3-certbot-nginx -y
 COPY ./files/geoserver_dev.conf /etc/nginx/conf.d
 
-EXPOSE 81
+#EXPOSE 81
+
+EXPOSE ${HTTP_PORT}
 
 STOPSIGNAL SIGTERM
 
