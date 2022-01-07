@@ -67,7 +67,7 @@ COPY files/tomcat-users.xml ${CATALINA_HOME}/conf
 COPY files/web.xml ${CATALINA_HOME}/conf
 COPY scripts/tomcat.service /etc/systemd/system/tomcat.service
 
-# PUT SPECIFIC LIBRARIES BELOW
+# Tomcat as Layer
 FROM tomcat as geoserver
 RUN apt-get install -y libgdal-java cmake nasm \
     && wget https://nav.dl.sourceforge.net/project/libjpeg-turbo/2.0.6/libjpeg-turbo-2.0.6.tar.gz \
