@@ -26,8 +26,6 @@ Useful extensions:
 - [Cross-layer filtering](https://docs.geoserver.org/latest/en/user/extensions/querylayer/index.html)
 - [Vector Tiles](https://docs.geoserver.org/latest/en/user/extensions/vectortiles/index.html)
 - [Web Coverage Service 2.0 Earth Observation extensions](https://docs.geoserver.org/latest/en/user/extensions/wcs20eo/index.html)
-- [Geofence Plugin](https://docs.geoserver.org/latest/en/user/extensions/geofence/index.html)
-- [Geofence Internal Server](https://docs.geoserver.org/latest/en/user/extensions/geofence-server/index.html)
 - [WMTS Multidimensional](https://docs.geoserver.org/latest/en/user/extensions/wmts-multidimensional/install.html)
 - [WPS Download plugin](https://docs.geoserver.org/latest/en/user/extensions/wps-download/index.html) | !PROVOCA IL CRASH DI GEOSERVER E QUINDI NON VERRA' SCARICATO
 
