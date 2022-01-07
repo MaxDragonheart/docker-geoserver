@@ -1,5 +1,4 @@
 # Geoserver-Drako
-Inspired from [geosolutions-it/docker-geoserver](https://github.com/geosolutions-it/docker-geoserver).
 
 ## Docker
 Build: `docker build -t LAYER-NAME .`
@@ -30,7 +29,7 @@ Useful extensions:
 - [Geofence Plugin](https://docs.geoserver.org/latest/en/user/extensions/geofence/index.html)
 - [Geofence Internal Server](https://docs.geoserver.org/latest/en/user/extensions/geofence-server/index.html)
 - [WMTS Multidimensional](https://docs.geoserver.org/latest/en/user/extensions/wmts-multidimensional/install.html)
-- [WPS Download plugin](https://docs.geoserver.org/latest/en/user/extensions/wps-download/index.html) | !PROVOCA IL CRASH DI GEOSERVER
+- [WPS Download plugin](https://docs.geoserver.org/latest/en/user/extensions/wps-download/index.html) | !PROVOCA IL CRASH DI GEOSERVER E QUINDI NON VERRA' SCARICATO
 
 ### Install Extension
 0. Put down Geoserver:
@@ -56,15 +55,15 @@ Useful extensions:
 
 1. Delete `datadir`:
 
-        rm -rf /var/lib/docker/volumes/geoserver-drako_geoserver-data/_data/datadir
+        rm -rf /var/lib/docker/volumes/geoserver-drako_geoserver/_data/data
 
 2. Create `datadir`:
 
-        mkdir datadir
+        mkdir data
 
 3. Copy all data from earlier folder to `datadir`:
 
-        sudo cp -r EARLIER_FOLDER_NAME/* /var/lib/docker/volumes/geoserver-drako_geoserver-data/_data/datadir
+        cp -r EARLIER_FOLDER_NAME/* /var/lib/docker/volumes/geoserver-drako_geoserver/_data/data
    
 4. Change `datadir` ownership:
 

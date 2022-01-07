@@ -2,27 +2,21 @@ version: '3.7'
 
 services:
   geoserver:
-    container_name: dev_geoserver
-    image: drako-geoserver:dev
+    image: maxdragonheart/geoserver:${GEOSERVER_VERSION}
     build:
       context: ./geoserver
       dockerfile: Dockerfile
       args:
-        GEOSERVER_VERSION: 2.19.4
-        HTTP_PORT: 8081/tcp
-      network: drako
+        GEOSERVER_VERSION: ${GEOSERVER_VERSION}
+        HTTP_PORT: ${HTTP_PORT}
+    container_name: geoserver
     restart: always
-    command: sh -c "/opt/tomcat/bin/catalina.sh run"
     ports:
-    - 8080:8080
+    - ${HTTP_PORT}:8080
     volumes:
-    - tomcat-conf:/opt/tomcat/conf
-    - tomcat-logs:/opt/tomcat/tomcat/logs
-    - geoserver-data:/opt/tomcat/tomcat/webapps/geoserver/data
-    - geoserver-customizations:/opt/tomcat/tomcat/webapps/geoserver/WEB-INF
+    - tomcat:/opt/tomcat
+    - geoserver:/opt/tomcat/webapps/geoserver
 
 volumes:
-  tomcat-conf:
-  tomcat-logs:
-  geoserver-data:
-  geoserver-customizations:
+  tomcat:
+  geoserver:

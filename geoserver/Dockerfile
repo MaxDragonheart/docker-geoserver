@@ -85,6 +85,8 @@ RUN mkdir ${CATALINA_HOME}/webapps/geoserver
 COPY --from=tmp_image data/geoserver ${CATALINA_HOME}/webapps/geoserver
 COPY --from=tmp_image data/plugins ${CATALINA_HOME}/webapps/geoserver/WEB-INF/lib
 
+WORKDIR ${CATALINA_HOME}
+
 EXPOSE ${HTTP_PORT}
 
 CMD ["/opt/tomcat/bin/catalina.sh", "run"]
