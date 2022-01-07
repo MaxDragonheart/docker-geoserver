@@ -7,6 +7,7 @@ echo " ---> Start download of Geoserver $GEOSERVER_VERSION"
 
 echo " ---> Download Geoserver in downloads/"
 mkdir downloads/
+echo " ---> Geoserver download link: $GEOSERVER_LINK"
 wget "$GEOSERVER_LINK" -P downloads/
 
 echo " ---> Unzip Geoserver from downloads/geoserver-$GEOSERVER_VERSION-war.zip to data/"

@@ -9,7 +9,7 @@ RUN apt-get update && apt upgrade -y \
     && apt-get install -y unzip wget
 
 ### Download Geoserver
-ARG GEOSERVER_VERSION=2.20.1
+ARG GEOSERVER_VERSION
 
 ENV \
     GEOSERVER_VERSION=${GEOSERVER_VERSION} \
@@ -25,7 +25,6 @@ RUN ./download-geoserver.sh
 ## Download extensions
 RUN mkdir -p data/plugins
 COPY ./files/extensions.txt data/
-ENV EXTENSIONS_FILE_LIST=data/extensions.txt
 COPY scripts/download-extensions.sh /download-extensions.sh
 RUN chmod +x download-extensions.sh
 RUN ./download-extensions.sh
@@ -45,7 +44,7 @@ RUN apt-get install -y unzip wget systemctl default-jdk
 ARG TOMCAT_MAJOR=9
 ARG TOMCAT_VERSION=9.0.56
 ARG CATALINA_HOME=/opt/tomcat
-ARG HTTP_PORT=8080/tcp
+ARG HTTP_PORT
 
 ENV \
     TOMCAT_VERSION=${TOMCAT_VERSION} \
@@ -74,4 +73,4 @@ COPY --from=tmp_image data/plugins ${CATALINA_HOME}/webapps/geoserver/WEB-INF/li
 
 EXPOSE ${HTTP_PORT}
 
-CMD ["/opt/tomcat/bin/catalina.sh", "run"]
+#CMD ["/opt/tomcat/bin/catalina.sh", "run"]
