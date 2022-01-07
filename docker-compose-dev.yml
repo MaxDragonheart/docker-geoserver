@@ -11,7 +11,7 @@ services:
         HTTP_PORT: ${HTTP_PORT}
     container_name: dev_geoserver
     restart: always
-    command: sh -c "/opt/tomcat/bin/catalina.sh run"
+#    command: sh -c "/opt/tomcat/bin/catalina.sh run"
     ports:
     - ${HTTP_PORT}:8080
     volumes:

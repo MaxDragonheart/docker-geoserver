@@ -1,3 +1,15 @@
 # List of Geoserver useful extensions | https://docs.geoserver.org/latest/en/user/extensions/index.html#extensions
+http://sourceforge.net/projects/geoserver/files/GeoServer/2.20.1/extensions/geoserver-2.20.1-gdal-plugin.zip
+http://sourceforge.net/projects/geoserver/files/GeoServer/2.20.1/extensions/geoserver-2.20.1-jp2k-plugin.zip
 http://sourceforge.net/projects/geoserver/files/GeoServer/2.20.1/extensions/geoserver-2.20.1-monitor-plugin.zip
 http://sourceforge.net/projects/geoserver/files/GeoServer/2.20.1/extensions/geoserver-2.20.1-importer-plugin.zip
+http://sourceforge.net/projects/geoserver/files/GeoServer/2.20.1/extensions/geoserver-2.20.1-querylayer-plugin.zip
+http://sourceforge.net/projects/geoserver/files/GeoServer/2.20.1/extensions/geoserver-2.20.1-vectortiles-plugin.zip
+http://sourceforge.net/projects/geoserver/files/GeoServer/2.20.1/extensions/geoserver-2.20.1-wcs2_0-eo-plugin.zip
+http://sourceforge.net/projects/geoserver/files/GeoServer/2.20.1/extensions/geoserver-2.20.1-geofence-plugin.zip
+http://sourceforge.net/projects/geoserver/files/GeoServer/2.20.1/extensions/geoserver-2.20.1-geofence-server-plugin.zip
+http://sourceforge.net/projects/geoserver/files/GeoServer/2.20.1/extensions/geoserver-2.20.1-wmts-multi-dimensional-plugin.zip
+
+## PROVOCA IL CRASH DI GEOSERVER
+#http://sourceforge.net/projects/geoserver/files/GeoServer/2.20.1/extensions/geoserver-2.20.1-wps-download-plugin.zip
+

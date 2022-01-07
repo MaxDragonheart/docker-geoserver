@@ -53,7 +53,7 @@ ENV \
     CATALINA_HOME=${CATALINA_HOME} \
     HTTP_PORT=${HTTP_PORT}
 
-FROM gis-os as tomcat-geoserver
+FROM gis-os as tomcat
 RUN mkdir -p ${CATALINA_HOME}
 
 RUN mkdir ${TOMCAT_DOWNLOAD_FOLDER}
@@ -67,10 +67,24 @@ COPY files/tomcat-users.xml ${CATALINA_HOME}/conf
 COPY files/web.xml ${CATALINA_HOME}/conf
 COPY scripts/tomcat.service /etc/systemd/system/tomcat.service
 
+# PUT SPECIFIC LIBRARIES BELOW
+FROM tomcat as geoserver
+RUN apt-get install -y libgdal-java cmake nasm \
+    && wget https://nav.dl.sourceforge.net/project/libjpeg-turbo/2.0.6/libjpeg-turbo-2.0.6.tar.gz \
+    && tar -zxf ./libjpeg-turbo-2.0.6.tar.gz \
+    && cd libjpeg-turbo-2.0.6 && cmake -G"Unix Makefiles" && make deb \
+    && dpkg -i ./libjpeg*.deb && apt-get -f install \
+    && apt-get -y purge cmake nasm\
+    && apt-get clean \
+    && apt-get -y autoclean \
+    && apt-get -y autoremove \
+    && rm -rf /var/lib/apt/lists/* \
+    && rm -rf /usr/share/man/* \
+    && rm -rf /usr/share/doc/*
 RUN mkdir ${CATALINA_HOME}/webapps/geoserver
 COPY --from=tmp_image data/geoserver ${CATALINA_HOME}/webapps/geoserver
 COPY --from=tmp_image data/plugins ${CATALINA_HOME}/webapps/geoserver/WEB-INF/lib
 
 EXPOSE ${HTTP_PORT}
 
-#CMD ["/opt/tomcat/bin/catalina.sh", "run"]
+CMD ["/opt/tomcat/bin/catalina.sh", "run"]

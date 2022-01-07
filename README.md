@@ -1,4 +1,4 @@
-# Geoserver-Drako 
+# Geoserver-Drako
 Inspired from [geosolutions-it/docker-geoserver](https://github.com/geosolutions-it/docker-geoserver).
 
 ## Docker
@@ -18,10 +18,19 @@ Access to container: `docker exec -it COINTAINERID bin`
 Full Docke command list [here](https://docs.docker.com/engine/reference/commandline/docker/).
 
 ## Geoserver
+Useful extensions:
 
-- [Extensions list](https://docs.geoserver.org/latest/en/user/extensions/index.html#extensions)
-- [Running in a production environment](https://docs.geoserver.org/latest/en/user/production/index.html#production)
-- [GeoServer data directory](https://docs.geoserver.org/latest/en/user/datadirectory/index.html#datadir)
+- [GDAL](https://docs.geoserver.org/stable/en/user/data/raster/gdal.html)
+- [Importer](https://docs.geoserver.org/latest/en/user/extensions/importer/index.html)
+- [JP2K Plugin](https://docs.geoserver.org/latest/en/user/extensions/jp2k/index.html)
+- [Monitoring](https://docs.geoserver.org/latest/en/user/extensions/jp2k/index.html)
+- [Cross-layer filtering](https://docs.geoserver.org/latest/en/user/extensions/querylayer/index.html)
+- [Vector Tiles](https://docs.geoserver.org/latest/en/user/extensions/vectortiles/index.html)
+- [Web Coverage Service 2.0 Earth Observation extensions](https://docs.geoserver.org/latest/en/user/extensions/wcs20eo/index.html)
+- [Geofence Plugin](https://docs.geoserver.org/latest/en/user/extensions/geofence/index.html)
+- [Geofence Internal Server](https://docs.geoserver.org/latest/en/user/extensions/geofence-server/index.html)
+- [WMTS Multidimensional](https://docs.geoserver.org/latest/en/user/extensions/wmts-multidimensional/install.html)
+- [WPS Download plugin](https://docs.geoserver.org/latest/en/user/extensions/wps-download/index.html) | !PROVOCA IL CRASH DI GEOSERVER
 
 ### Install Extension
 0. Put down Geoserver:
@@ -64,3 +73,8 @@ Full Docke command list [here](https://docs.docker.com/engine/reference/commandl
 5. Put UP Geoserver:
 
         sudo docker-compose -f docker-compose-dev.yml up -d
+
+### Links
+- [Extensions list](https://docs.geoserver.org/latest/en/user/extensions/index.html#extensions)
+- [Running in a production environment](https://docs.geoserver.org/latest/en/user/production/index.html#production)
+- [GeoServer data directory](https://docs.geoserver.org/latest/en/user/datadirectory/index.html#datadir)
