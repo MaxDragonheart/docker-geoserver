@@ -77,3 +77,4 @@ Useful extensions:
 - [Extensions list](https://docs.geoserver.org/latest/en/user/extensions/index.html#extensions)
 - [Running in a production environment](https://docs.geoserver.org/latest/en/user/production/index.html#production)
 - [GeoServer data directory](https://docs.geoserver.org/latest/en/user/datadirectory/index.html#datadir)
+
