@@ -1,14 +1,92 @@
 # syntax=docker/dockerfile:1
 
-# Official Geosolutions/Geoserver Image as Layer
-FROM geosolutionsit/geoserver as geoserver
+# Image useful for stuffs collection
+FROM ubuntu:20.04 as tmp_image
+## Disable Prompt During Packages Installation
+ARG DEBIAN_FRONTEND=noninteractive
+## Update&Upgrade Ubuntu and install useful stuffs
+RUN apt-get update && apt upgrade -y \
+    && apt-get install -y unzip wget
 
-ENV TOMCAT_CONF=/usr/local/tomcat/conf
+### Download Geoserver
+ARG GEOSERVER_VERSION
 
-#COPY files/web.xml $TOMCAT_CONF
+ENV \
+    GEOSERVER_VERSION=${GEOSERVER_VERSION} \
+    GEOSERVER_LINK="http://sourceforge.net/projects/geoserver/files/GeoServer/${GEOSERVER_VERSION}/geoserver-${GEOSERVER_VERSION}-war.zip"
 
-#CMD ["pwd"]
+RUN mkdir data
 
-# Important folder
-# webapps/geoserver/WEB-INF <-- si mettono i plugins
-# webapps/geoserver/data <-- si mettono i dati cartografici e degli utenti
+RUN mkdir -p data/geoserver
+COPY scripts/download-geoserver.sh /download-geoserver.sh
+RUN chmod +x download-geoserver.sh
+RUN ./download-geoserver.sh
+
+## Download extensions
+RUN mkdir -p data/plugins
+COPY ./files/extensions.txt data/
+COPY scripts/download-extensions.sh /download-extensions.sh
+RUN chmod +x download-extensions.sh
+RUN ./download-extensions.sh
+
+# ULGIS as Layer
+FROM gisconsultant/ulgis as gis-os
+## Disable Prompt During Packages Installation
+ARG DEBIAN_FRONTEND=noninteractive
+## Update&Upgrade and install useful stuffs
+RUN apt-get update && apt-get upgrade -y
+RUN apt-get install -y unzip wget systemctl default-jdk
+
+# GIS-OS as Layer
+## Geoserver Web Archive Installation
+## https://docs.geoserver.org/latest/en/user/installation/war.html
+## Environment Variables
+ARG TOMCAT_MAJOR=9
+ARG TOMCAT_VERSION=9.0.56
+ARG CATALINA_HOME=/opt/tomcat
+ARG HTTP_PORT
+
+ENV \
+    TOMCAT_VERSION=${TOMCAT_VERSION} \
+    TOMCAT_LINK="https://dlcdn.apache.org/tomcat/tomcat-${TOMCAT_MAJOR}/v${TOMCAT_VERSION}/bin/apache-tomcat-${TOMCAT_VERSION}.tar.gz" \
+    TOMCAT_DOWNLOAD_FOLDER=tomcat-${TOMCAT_VERSION} \
+    CATALINA_HOME=${CATALINA_HOME} \
+    HTTP_PORT=${HTTP_PORT}
+
+FROM gis-os as tomcat
+RUN mkdir -p ${CATALINA_HOME}
+
+RUN mkdir ${TOMCAT_DOWNLOAD_FOLDER}
+WORKDIR ${TOMCAT_DOWNLOAD_FOLDER}
+RUN wget ${TOMCAT_LINK} \
+    && tar xzvf apache-tomcat-${TOMCAT_VERSION}.tar.gz -C ${CATALINA_HOME} --strip-components=1
+WORKDIR /
+RUN rm -rf ${TOMCAT_DOWNLOAD_FOLDER}
+COPY files/context.xml ${CATALINA_HOME}/webapps/manager/META-INF
+COPY files/tomcat-users.xml ${CATALINA_HOME}/conf
+COPY files/web.xml ${CATALINA_HOME}/conf
+COPY scripts/tomcat.service /etc/systemd/system/tomcat.service
+
+# PUT SPECIFIC LIBRARIES BELOW
+FROM tomcat as geoserver
+RUN apt-get install -y libgdal-java cmake nasm \
+    && wget https://nav.dl.sourceforge.net/project/libjpeg-turbo/2.0.6/libjpeg-turbo-2.0.6.tar.gz \
+    && tar -zxf ./libjpeg-turbo-2.0.6.tar.gz \
+    && cd libjpeg-turbo-2.0.6 && cmake -G"Unix Makefiles" && make deb \
+    && dpkg -i ./libjpeg*.deb && apt-get -f install \
+    && apt-get -y purge cmake nasm\
+    && apt-get clean \
+    && apt-get -y autoclean \
+    && apt-get -y autoremove \
+    && rm -rf /var/lib/apt/lists/* \
+    && rm -rf /usr/share/man/* \
+    && rm -rf /usr/share/doc/*
+RUN mkdir ${CATALINA_HOME}/webapps/geoserver
+COPY --from=tmp_image data/geoserver ${CATALINA_HOME}/webapps/geoserver
+COPY --from=tmp_image data/plugins ${CATALINA_HOME}/webapps/geoserver/WEB-INF/lib
+
+WORKDIR ${CATALINA_HOME}
+
+EXPOSE ${HTTP_PORT}
+
+CMD ["/opt/tomcat/bin/catalina.sh", "run"]
