@@ -8,12 +8,12 @@ services:
       dockerfile: Dockerfile
       args:
         GEOSERVER_VERSION: 2.20.1
-        HTTP_PORT: 8081/tcp
+        HTTP_PORT: 8080/tcp
     container_name: dev_geoserver
     restart: always
     command: sh -c "/opt/tomcat/bin/catalina.sh run"
     ports:
-    - 8081:8080
+    - 8080:8080
     volumes:
     - tomcat-conf:/opt/tomcat/conf
     - tomcat-logs:/opt/tomcat/tomcat/logs
