@@ -22,12 +22,12 @@ COPY scripts/download-geoserver.sh /download-geoserver.sh
 RUN chmod +x download-geoserver.sh
 RUN ./download-geoserver.sh
 
-### Download extensions
-#RUN mkdir -p data/plugins
-#COPY files/geoserver/extensions.txt data/
-#COPY scripts/download-extensions.sh /download-extensions.sh
-#RUN chmod +x download-extensions.sh
-#RUN ./download-extensions.sh
+## Download extensions
+RUN mkdir -p data/plugins
+COPY files/geoserver/extensions.txt data/
+COPY scripts/download-extensions.sh /download-extensions.sh
+RUN chmod +x download-extensions.sh
+RUN ./download-extensions.sh
 
 # ULGIS as Layer
 FROM gisconsultant/ulgis as gis-os
@@ -85,7 +85,7 @@ RUN apt-get install -y libgdal-java cmake nasm \
 
 RUN mkdir ${CATALINA_HOME}/webapps/geoserver
 COPY --from=tmp_image data/geoserver ${CATALINA_HOME}/webapps/geoserver
-#COPY --from=tmp_image data/plugins ${CATALINA_HOME}/webapps/geoserver/WEB-INF/lib
+COPY --from=tmp_image data/plugins ${CATALINA_HOME}/webapps/geoserver/WEB-INF/lib
 COPY files/geoserver/web.xml ${CATALINA_HOME}/webapps/geoserver/WEB-INF
 
 WORKDIR ${CATALINA_HOME}
