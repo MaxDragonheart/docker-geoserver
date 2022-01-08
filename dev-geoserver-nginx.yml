@@ -9,7 +9,7 @@ services:
       args:
         GEOSERVER_VERSION: ${GEOSERVER_VERSION}
         HTTP_PORT: ${HTTP_PORT}
-    container_name: geoserver
+    container_name: dev_geoserver
     restart: always
     volumes:
     - tomcat:/opt/tomcat

@@ -13,7 +13,7 @@ RUN apt install nginx -y \
 
 #FROM nginx as certbot
 #RUN apt install python3-certbot-nginx -y
-COPY ./files/geoserver_dev.conf /etc/nginx/conf.d
+COPY files/geoserver.conf /etc/nginx/conf.d
 
 EXPOSE 81
 

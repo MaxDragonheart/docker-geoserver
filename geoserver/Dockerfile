@@ -69,10 +69,11 @@ COPY scripts/tomcat.service /etc/systemd/system/tomcat.service
 
 # Tomcat as Layer
 FROM tomcat as geoserver
+ENV LIBJPEG_VERSION=2.0.6
 RUN apt-get install -y libgdal-java cmake nasm \
-    && wget https://nav.dl.sourceforge.net/project/libjpeg-turbo/2.0.6/libjpeg-turbo-2.0.6.tar.gz \
-    && tar -zxf ./libjpeg-turbo-2.0.6.tar.gz \
-    && cd libjpeg-turbo-2.0.6 && cmake -G"Unix Makefiles" && make deb \
+    && wget https://nav.dl.sourceforge.net/project/libjpeg-turbo/${LIBJPEG_VERSION}/libjpeg-turbo-${LIBJPEG_VERSION}.tar.gz \
+    && tar -zxf ./libjpeg-turbo-${LIBJPEG_VERSION}.tar.gz \
+    && cd libjpeg-turbo-${LIBJPEG_VERSION} && cmake -G"Unix Makefiles" && make deb \
     && dpkg -i ./libjpeg*.deb && apt-get -f install \
     && apt-get -y purge cmake nasm\
     && apt-get clean \
