@@ -461,6 +461,7 @@
     </servlet-mapping>
 -->
 
+
   <!-- ================== Built In Filter Definitions ===================== -->
 
   <!-- A filter that sets various security related HTTP Response headers.   -->
@@ -542,7 +543,6 @@
   <!-- this to work you will need to uncomment the .shtml mime type         -->
   <!-- definition towards the bottom of this file.                          -->
   <!-- The contentType init param allows you to apply SSI processing to JSP -->
-
   <!-- pages, JavaScript, or any other content you wish.  This filter       -->
   <!-- supports the following initialization parameters (default values are -->
   <!-- in square brackets):                                                 -->
@@ -624,28 +624,19 @@
         <url-pattern>*.shtml</url-pattern>
     </filter-mapping>
 -->
+
     <filter>
-      <filter-name>cross-origin</filter-name>
+      <filter-name>CorsFilter</filter-name>
       <filter-class>org.apache.catalina.filters.CorsFilter</filter-class>
       <init-param>
         <param-name>cors.allowed.origins</param-name>
         <param-value>*</param-value>
       </init-param>
-      <init-param>
-        <param-name>cors.allowed.methods</param-name>
-        <param-value>GET,POST,PUT,DELETE,HEAD,OPTIONS</param-value>
-      </init-param>
-      <init-param>
-        <param-name>cors.allowed.headers</param-name>
-        <param-value>*</param-value>
-      </init-param>
     </filter>
-
     <filter-mapping>
-      <filter-name>cross-origin</filter-name>
+      <filter-name>CorsFilter</filter-name>
       <url-pattern>/*</url-pattern>
     </filter-mapping>
-
 
   <!-- ==================== Default Session Configuration ================= -->
   <!-- You can set the default session timeout (in minutes) for all newly   -->
@@ -4272,6 +4263,10 @@
     <mime-mapping>
         <extension>wad</extension>
         <mime-type>application/x-doom</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>wasm</extension>
+        <mime-type>application/wasm</mime-type>
     </mime-mapping>
     <mime-mapping>
         <extension>wav</extension>
