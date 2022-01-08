@@ -22,12 +22,12 @@ COPY scripts/download-geoserver.sh /download-geoserver.sh
 RUN chmod +x download-geoserver.sh
 RUN ./download-geoserver.sh
 
-## Download extensions
-RUN mkdir -p data/plugins
-COPY ./files/extensions.txt data/
-COPY scripts/download-extensions.sh /download-extensions.sh
-RUN chmod +x download-extensions.sh
-RUN ./download-extensions.sh
+### Download extensions
+#RUN mkdir -p data/plugins
+#COPY files/geoserver/extensions.txt data/
+#COPY scripts/download-extensions.sh /download-extensions.sh
+#RUN chmod +x download-extensions.sh
+#RUN ./download-extensions.sh
 
 # ULGIS as Layer
 FROM gisconsultant/ulgis as gis-os
@@ -62,9 +62,9 @@ RUN wget ${TOMCAT_LINK} \
     && tar xzvf apache-tomcat-${TOMCAT_VERSION}.tar.gz -C ${CATALINA_HOME} --strip-components=1
 WORKDIR /
 RUN rm -rf ${TOMCAT_DOWNLOAD_FOLDER}
-COPY files/context.xml ${CATALINA_HOME}/webapps/manager/META-INF
-COPY files/tomcat-users.xml ${CATALINA_HOME}/conf
-COPY files/web.xml ${CATALINA_HOME}/conf
+COPY files/tomcat/context.xml ${CATALINA_HOME}/webapps/manager/META-INF
+COPY files/tomcat/tomcat-users.xml ${CATALINA_HOME}/conf
+COPY files/tomcat/web.xml ${CATALINA_HOME}/conf
 COPY scripts/tomcat.service /etc/systemd/system/tomcat.service
 
 # Tomcat as Layer
@@ -81,9 +81,11 @@ RUN apt-get install -y libgdal-java cmake nasm \
     && rm -rf /var/lib/apt/lists/* \
     && rm -rf /usr/share/man/* \
     && rm -rf /usr/share/doc/*
+
 RUN mkdir ${CATALINA_HOME}/webapps/geoserver
 COPY --from=tmp_image data/geoserver ${CATALINA_HOME}/webapps/geoserver
-COPY --from=tmp_image data/plugins ${CATALINA_HOME}/webapps/geoserver/WEB-INF/lib
+#COPY --from=tmp_image data/plugins ${CATALINA_HOME}/webapps/geoserver/WEB-INF/lib
+COPY files/geoserver/web.xml ${CATALINA_HOME}/webapps/geoserver/WEB-INF
 
 WORKDIR ${CATALINA_HOME}
 

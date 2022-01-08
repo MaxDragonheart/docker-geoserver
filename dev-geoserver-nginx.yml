@@ -11,8 +11,6 @@ services:
         HTTP_PORT: ${HTTP_PORT}
     container_name: geoserver
     restart: always
-    ports:
-    - ${HTTP_PORT}:8080
     volumes:
     - tomcat:/opt/tomcat
     - geoserver:/opt/tomcat/webapps/geoserver
@@ -30,7 +28,7 @@ services:
 #      - certbot-etc:/etc/letsencrypt
 #      - certbot-var:/var/lib/letsencrypt
     ports:
-      - ${HTTP_PORT}:81
+      - 81:81
 #      - 443:443
     depends_on:
       - geoserver

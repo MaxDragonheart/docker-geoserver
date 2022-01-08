@@ -27,7 +27,6 @@ Useful extensions:
 - [Vector Tiles](https://docs.geoserver.org/latest/en/user/extensions/vectortiles/index.html)
 - [Web Coverage Service 2.0 Earth Observation extensions](https://docs.geoserver.org/latest/en/user/extensions/wcs20eo/index.html)
 - [WMTS Multidimensional](https://docs.geoserver.org/latest/en/user/extensions/wmts-multidimensional/install.html)
-- [WPS Download plugin](https://docs.geoserver.org/latest/en/user/extensions/wps-download/index.html) | !PROVOCA IL CRASH DI GEOSERVER E QUINDI NON VERRA' SCARICATO
 
 ### Install Extension
 0. Put down Geoserver:
