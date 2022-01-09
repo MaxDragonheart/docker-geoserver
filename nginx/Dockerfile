@@ -10,10 +10,10 @@ RUN apt update && apt upgrade -y
 FROM os as nginx
 RUN apt install nginx -y \
     && apt-get install software-properties-common -y
-
-FROM nginx as certbot
-RUN apt install python3-certbot-nginx -y
 COPY files/geoserver.conf /etc/nginx/conf.d
+
+#FROM nginx as certbot
+#RUN apt install python3-certbot-nginx -y
 
 EXPOSE 80
 #EXPOSE ${NGINX_HTTP_PORT}

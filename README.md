@@ -75,3 +75,9 @@ Useful extensions:
 - [Running in a production environment](https://docs.geoserver.org/latest/en/user/production/index.html#production)
 - [GeoServer data directory](https://docs.geoserver.org/latest/en/user/datadirectory/index.html#datadir)
 
+## NGINX
+
+If Apache2 is up, it's necessary to put it down.
+Check Apache2 status: `sudo systemctl status apache2`
+Stop Apache2: `sudo systemctl stop apache2`
+
