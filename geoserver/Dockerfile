@@ -43,7 +43,7 @@ FROM ubuntu:20.04 as tmp_image
 ## Disable Prompt During Packages Installation
 ARG DEBIAN_FRONTEND=noninteractive
 ## Update&Upgrade Ubuntu and install useful stuffs
-RUN apt-get update && apt upgrade -y \
+RUN apt-get update && apt-get upgrade -y \
     && apt-get install -y unzip wget
 
 ### Download Geoserver
