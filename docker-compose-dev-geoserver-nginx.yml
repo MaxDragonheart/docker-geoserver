@@ -15,7 +15,6 @@ services:
     - tomcat:/opt/tomcat
     - geoserver:/opt/tomcat/webapps/geoserver
 
-
   nginx:
     image: dev_geoserver/nginx
     build:
@@ -25,12 +24,12 @@ services:
     volumes:
       - nginx-conf:/etc/nginx
       - nginx-log:/var/log/nginx
-#      - certbot-etc:/etc/letsencrypt
-#      - certbot-var:/var/lib/letsencrypt
+      - certbot-etc:/etc/letsencrypt
+      - certbot-var:/var/lib/letsencrypt
     ports:
 #      - ${NGINX_HTTP_PORT}:${NGINX_HTTP_PORT}
       - 80:80
-#      - 443:443
+      - 443:443
     depends_on:
       - geoserver
 
@@ -39,5 +38,5 @@ volumes:
   geoserver:
   nginx-conf:
   nginx-log:
-#  certbot-etc:
-#  certbot-var:
+  certbot-etc:
+  certbot-var:

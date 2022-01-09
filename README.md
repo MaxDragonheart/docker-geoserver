@@ -14,7 +14,7 @@ Run permanently: `docker-compose -f docker-compose.yml up -d`
 
 Access to container: `docker exec -it COINTAINERID bin`
 
-Full Docke command list [here](https://docs.docker.com/engine/reference/commandline/docker/).
+Full Docker command list [here](https://docs.docker.com/engine/reference/commandline/docker/).
 
 ## Geoserver
 
@@ -88,3 +88,13 @@ If Apache2 is up, it's necessary to put it down.
 Check Apache2 status: `sudo systemctl status apache2`
 Stop Apache2: `sudo systemctl stop apache2`
 
+
+### Create an SSL certificate with Certbot
+
+Enter to the image that use nginx:
+
+    docker exec -it <nginx_img_id> bin/bash
+
+Make certificate:
+
+    certbot --nginx -d domain.com -d www.domain.com
