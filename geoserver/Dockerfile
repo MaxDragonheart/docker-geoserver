@@ -89,7 +89,6 @@ COPY --from=tmp_image data/plugins ${CATALINA_HOME}/webapps/geoserver/WEB-INF/li
 COPY files/geoserver/web.xml ${CATALINA_HOME}/webapps/geoserver/WEB-INF
 
 WORKDIR ${CATALINA_HOME}
-
 EXPOSE ${HTTP_PORT}
 
 CMD ["/opt/tomcat/bin/catalina.sh", "run"]
