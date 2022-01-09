@@ -17,7 +17,14 @@ Access to container: `docker exec -it COINTAINERID bin`
 Full Docke command list [here](https://docs.docker.com/engine/reference/commandline/docker/).
 
 ## Geoserver
-Useful extensions:
+
+### Credentials
+
+Username: `admin`
+
+Password: `geoserver`
+
+### Useful extensions
 
 - [GDAL](https://docs.geoserver.org/stable/en/user/data/raster/gdal.html)
 - [Importer](https://docs.geoserver.org/latest/en/user/extensions/importer/index.html)

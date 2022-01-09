@@ -1,34 +1,5 @@
 # syntax=docker/dockerfile:1
 
-# Image useful for stuffs collection
-FROM ubuntu:20.04 as tmp_image
-## Disable Prompt During Packages Installation
-ARG DEBIAN_FRONTEND=noninteractive
-## Update&Upgrade Ubuntu and install useful stuffs
-RUN apt-get update && apt upgrade -y \
-    && apt-get install -y unzip wget
-
-### Download Geoserver
-ARG GEOSERVER_VERSION
-
-ENV \
-    GEOSERVER_VERSION=${GEOSERVER_VERSION} \
-    GEOSERVER_LINK="http://sourceforge.net/projects/geoserver/files/GeoServer/${GEOSERVER_VERSION}/geoserver-${GEOSERVER_VERSION}-war.zip"
-
-RUN mkdir data
-
-RUN mkdir -p data/geoserver
-COPY scripts/download-geoserver.sh /download-geoserver.sh
-RUN chmod +x download-geoserver.sh
-RUN ./download-geoserver.sh
-
-## Download extensions
-RUN mkdir -p data/plugins
-COPY files/geoserver/extensions.txt data/
-COPY scripts/download-extensions.sh /download-extensions.sh
-RUN chmod +x download-extensions.sh
-RUN ./download-extensions.sh
-
 # ULGIS as Layer
 FROM gisconsultant/ulgis as gis-os
 ## Disable Prompt During Packages Installation
@@ -65,7 +36,36 @@ RUN rm -rf ${TOMCAT_DOWNLOAD_FOLDER}
 COPY files/tomcat/context.xml ${CATALINA_HOME}/webapps/manager/META-INF
 COPY files/tomcat/tomcat-users.xml ${CATALINA_HOME}/conf
 COPY files/tomcat/web.xml ${CATALINA_HOME}/conf
-COPY scripts/tomcat.service /etc/systemd/system/tomcat.service
+COPY files/tomcat/tomcat.service /etc/systemd/system/tomcat.service
+
+# Image useful for stuffs collection
+FROM ubuntu:20.04 as tmp_image
+## Disable Prompt During Packages Installation
+ARG DEBIAN_FRONTEND=noninteractive
+## Update&Upgrade Ubuntu and install useful stuffs
+RUN apt-get update && apt upgrade -y \
+    && apt-get install -y unzip wget
+
+### Download Geoserver
+ARG GEOSERVER_VERSION
+
+ENV GEOSERVER_VERSION=${GEOSERVER_VERSION}
+
+RUN mkdir -p data/geoserver
+COPY scripts/download-geoserver.sh /download-geoserver.sh
+RUN chmod +x download-geoserver.sh
+RUN ./download-geoserver.sh
+## Remove default datadir with demo data
+RUN rm -rf /data/geoserver/data
+## and copy empty datadir
+COPY ./data /data/geoserver/data
+
+## Download extensions
+RUN mkdir -p data/plugins
+COPY files/geoserver/extensions.txt data/
+COPY scripts/download-extensions.sh /download-extensions.sh
+RUN chmod +x download-extensions.sh
+RUN ./download-extensions.sh
 
 # Tomcat as Layer
 FROM tomcat as geoserver
