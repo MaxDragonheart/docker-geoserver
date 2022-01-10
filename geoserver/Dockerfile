@@ -46,11 +46,11 @@ ARG DEBIAN_FRONTEND=noninteractive
 RUN apt-get update && apt-get upgrade -y \
     && apt-get install -y unzip wget
 
-### Download Geoserver
-ARG GEOSERVER_VERSION
+ARG GEOSERVER_VERSION=2.20.1
 
 ENV GEOSERVER_VERSION=${GEOSERVER_VERSION}
 
+### Download Geoserver
 RUN mkdir -p data/geoserver
 COPY scripts/download-geoserver.sh /download-geoserver.sh
 RUN chmod +x download-geoserver.sh
@@ -62,7 +62,7 @@ COPY ./data /data/geoserver/data
 
 ## Download extensions
 RUN mkdir -p data/plugins
-COPY files/geoserver/extensions.txt data/
+#COPY files/geoserver/extensions.txt data/
 COPY scripts/download-extensions.sh /download-extensions.sh
 RUN chmod +x download-extensions.sh
 RUN ./download-extensions.sh
