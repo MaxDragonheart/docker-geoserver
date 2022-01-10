@@ -33,7 +33,7 @@ RUN wget ${TOMCAT_LINK} \
     && tar xzvf apache-tomcat-${TOMCAT_VERSION}.tar.gz -C ${CATALINA_HOME} --strip-components=1
 WORKDIR /
 RUN rm -rf ${TOMCAT_DOWNLOAD_FOLDER}
-COPY files/tomcat/context.xml ${CATALINA_HOME}/webapps/manager/META-INF
+#COPY files/tomcat/context.xml ${CATALINA_HOME}/webapps/manager/META-INF
 COPY files/tomcat/tomcat-users.xml ${CATALINA_HOME}/conf
 COPY files/tomcat/web.xml ${CATALINA_HOME}/conf
 COPY files/tomcat/tomcat.service /etc/systemd/system/tomcat.service
