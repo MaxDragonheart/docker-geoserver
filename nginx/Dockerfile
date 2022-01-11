@@ -5,15 +5,15 @@ FROM ubuntu:20.04 as os
 # Disable Prompt During Packages Installation
 ARG DEBIAN_FRONTEND=noninteractive
 # Update&Upgrade Ubuntu
-RUN apt update && apt upgrade -y
+RUN apt-get update && apt-get upgrade -y
 
 FROM os as nginx
-RUN apt install nginx -y \
+RUN apt-get install nginx -y \
     && apt-get install software-properties-common -y
-
-#FROM nginx as certbot
-#RUN apt install python3-certbot-nginx -y
 COPY files/geoserver.conf /etc/nginx/conf.d
+
+FROM nginx as certbot
+RUN apt-get install python3-certbot-nginx -y
 
 EXPOSE 80
 #EXPOSE ${NGINX_HTTP_PORT}

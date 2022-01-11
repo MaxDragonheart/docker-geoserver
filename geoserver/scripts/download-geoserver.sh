@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+GEOSERVER_LINK="http://sourceforge.net/projects/geoserver/files/GeoServer/${GEOSERVER_VERSION}/geoserver-${GEOSERVER_VERSION}-war.zip"
 GEOSERVER_WAR=data/geoserver.war
 GEOSERVER_FOLDER=data/geoserver
 
