@@ -99,3 +99,7 @@ Enter to the image that use nginx:
 Make certificate:
 
     certbot --nginx -d domain.com -d www.domain.com
+
+Put down Geoserver and NGINX, then edit `WEB-INF/web.xml`. Uncomment `PROXY_BASE_URL` and add your domain: `https://example.com/geoserver`.
+
+Put up Geoserver and NGINX, go to `example.com`
