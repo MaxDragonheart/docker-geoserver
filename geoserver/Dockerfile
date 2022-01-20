@@ -15,14 +15,14 @@ RUN apt-get install -y unzip wget systemctl default-jdk
 ARG TOMCAT_MAJOR=9
 ARG TOMCAT_VERSION=9.0.56
 ARG CATALINA_HOME=/opt/tomcat
-ARG HTTP_PORT
+ARG GS_HTTP_PORT=8300
 
 ENV \
     TOMCAT_VERSION=${TOMCAT_VERSION} \
     TOMCAT_LINK="https://dlcdn.apache.org/tomcat/tomcat-${TOMCAT_MAJOR}/v${TOMCAT_VERSION}/bin/apache-tomcat-${TOMCAT_VERSION}.tar.gz" \
     TOMCAT_DOWNLOAD_FOLDER=tomcat-${TOMCAT_VERSION} \
     CATALINA_HOME=${CATALINA_HOME} \
-    HTTP_PORT=${HTTP_PORT}
+    GS_HTTP_PORT=${GS_HTTP_PORT}
 
 FROM gis-os as tomcat
 RUN mkdir -p ${CATALINA_HOME}
@@ -45,9 +45,9 @@ ARG DEBIAN_FRONTEND=noninteractive
 RUN apt-get update && apt-get upgrade -y \
     && apt-get install -y unzip wget
 
-ARG GEOSERVER_VERSION
+ARG GS_VERSION=2.20.1
 
-ENV GEOSERVER_VERSION=${GEOSERVER_VERSION}
+ENV GS_VERSION=${GS_VERSION}
 
 ### Download Geoserver
 RUN mkdir -p data/geoserver
@@ -56,12 +56,9 @@ RUN chmod +x download-geoserver.sh
 RUN ./download-geoserver.sh
 ## Remove default datadir with demo data
 RUN rm -rf /data/geoserver/data
-### and copy empty datadir
-#COPY ./data /data/geoserver/data
 
 ## Download extensions
 RUN mkdir -p data/plugins
-#COPY files/geoserver/extensions.txt data/
 COPY scripts/download-extensions.sh /download-extensions.sh
 RUN chmod +x download-extensions.sh
 RUN ./download-extensions.sh
@@ -102,7 +99,7 @@ COPY files/geoserver/web.xml ${CATALINA_HOME}/webapps/geoserver/WEB-INF
 ### CSRF Protection | https://docs.geoserver.org/stable/en/user/security/webadmin/csrf.html#csrf-protection
 #ARG CSRF_WHITELIST="*"
 
-ENV GEOSERVER_OPTS=" \
+ENV GS_OPTIONS=" \
   -Duser.timezone=UTC \
   -Dorg.geotools.shapefile.datetime=true"
 #  -DGEOSERVER_LOG_LOCATION=${GEOSERVER_LOG_LOCATION} \
@@ -112,17 +109,20 @@ ENV GEOSERVER_OPTS=" \
 #  -DGRIB_CACHE_DIR=${GRIB_CACHE_DIR} \
 
 ## Container Considerations | https://docs.geoserver.org/stable/en/user/production/container.html#optimize-your-jvm
-ENV INITIAL_MEMORY=1G
-ENV MAXIMUM_MEMORY=4G
+ARG GS_INITIAL_MEMORY=1G
+ARG GS_MAXIMUM_MEMORY=4G
 
-ENV JAVA_OPTS="-Xms${INITIAL_MEMORY} -Xmx${MAXIMUM_MEMORY} \
+ENV GS_INITIAL_MEMORY=${GS_INITIAL_MEMORY} \
+    GS_MAXIMUM_MEMORY=${GS_MAXIMUM_MEMORY}
+
+ENV JAVA_OPTS="-Xms${GS_INITIAL_MEMORY} -Xmx${GS_MAXIMUM_MEMORY} \
   -Djava.awt.headless=true -server \
   -Dfile.encoding=UTF8 \
   -Djavax.servlet.request.encoding=UTF-8 \
   -Djavax.servlet.response.encoding=UTF-8 \
   -XX:SoftRefLRUPolicyMSPerMB=36000 -XX:+UseG1GC \
   -XX:MaxGCPauseMillis=200 -XX:ParallelGCThreads=20 -XX:ConcGCThreads=5 \
-  ${GEOSERVER_OPTS}"
+  ${GS_OPTIONS}"
 
 COPY ./scripts/start-geoserver.sh ./
 RUN chmod +x start-geoserver.sh
@@ -130,7 +130,7 @@ RUN chmod +x start-geoserver.sh
 #RUN /start-geoserver.sh
 
 WORKDIR ${CATALINA_HOME}
-EXPOSE ${HTTP_PORT}
+EXPOSE ${GS_HTTP_PORT}
 
 CMD ["/start-geoserver.sh", "run"]
 

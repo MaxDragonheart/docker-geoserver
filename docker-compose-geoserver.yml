@@ -2,21 +2,23 @@ version: '3.7'
 
 services:
   geoserver:
-    image: gisconsultant/geoserver:${GEOSERVER_VERSION}
+    image: gisconsultant/geoserver:${GS_VERSION}
     build:
       context: ./geoserver
       dockerfile: Dockerfile
       args:
-        GEOSERVER_VERSION: ${GEOSERVER_VERSION}
-        HTTP_PORT: ${HTTP_PORT}
+        GS_VERSION: ${GS_VERSION}
+        GS_HTTP_PORT: ${GS_HTTP_PORT}
+        GS_INITIAL_MEMORY: ${GS_INITIAL_MEMORY}
+        GS_MAXIMUM_MEMORY: ${GS_MAXIMUM_MEMORY}
     container_name: geoserver
     restart: always
     ports:
-    - ${HTTP_PORT}:8080
-    volumes:
-    - tomcat:/opt/tomcat
-    - geoserver:/opt/tomcat/webapps/geoserver
-
-volumes:
-  tomcat:
-  geoserver:
+    - ${GS_HTTP_PORT}:8080
+#    volumes:
+#    - tomcat:/opt/tomcat
+#    - geoserver:/opt/tomcat/webapps/geoserver
+#
+#volumes:
+#  tomcat:
+#  geoserver:

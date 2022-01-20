@@ -1,18 +1,18 @@
 #!/usr/bin/env bash
 
-GEOSERVER_LINK="http://sourceforge.net/projects/geoserver/files/GeoServer/${GEOSERVER_VERSION}/geoserver-${GEOSERVER_VERSION}-war.zip"
+GEOSERVER_LINK="http://sourceforge.net/projects/geoserver/files/GeoServer/${GS_VERSION}/geoserver-${GS_VERSION}-war.zip"
 GEOSERVER_WAR=data/geoserver.war
 GEOSERVER_FOLDER=data/geoserver
 
-echo " ---> Start download of Geoserver $GEOSERVER_VERSION"
+echo " ---> Start download of Geoserver $GS_VERSION"
 
 echo " ---> Download Geoserver in downloads/"
 mkdir downloads/
 echo " ---> Geoserver download link: $GEOSERVER_LINK"
 wget "$GEOSERVER_LINK" -P downloads/
 
-echo " ---> Unzip Geoserver from downloads/geoserver-$GEOSERVER_VERSION-war.zip to data/"
-unzip downloads/geoserver-"$GEOSERVER_VERSION"-war.zip '*.war' -d data/
+echo " ---> Unzip Geoserver from downloads/geoserver-$GS_VERSION-war.zip to data/"
+unzip downloads/geoserver-"$GS_VERSION"-war.zip '*.war' -d data/
 
 echo " ---> Unzip .war from $GEOSERVER_WAR to $GEOSERVER_FOLDER"
 unzip "$GEOSERVER_WAR" -d "$GEOSERVER_FOLDER"
