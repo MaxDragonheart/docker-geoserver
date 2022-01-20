@@ -15,10 +15,10 @@ services:
     restart: always
     ports:
     - ${GS_HTTP_PORT}:8080
-#    volumes:
-#    - tomcat:/opt/tomcat
-#    - geoserver:/opt/tomcat/webapps/geoserver
-#
-#volumes:
-#  tomcat:
-#  geoserver:
+    volumes:
+    - tomcat:/opt/tomcat
+    - geoserver:/opt/tomcat/webapps/geoserver
+
+volumes:
+  tomcat:
+  geoserver:

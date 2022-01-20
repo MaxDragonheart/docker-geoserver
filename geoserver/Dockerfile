@@ -86,11 +86,13 @@ COPY --from=tmp_image data/geoserver ${CATALINA_HOME}/webapps/geoserver
 COPY --from=tmp_image data/plugins ${CATALINA_HOME}/webapps/geoserver/WEB-INF/lib
 COPY files/geoserver/web.xml ${CATALINA_HOME}/webapps/geoserver/WEB-INF
 
+ENV GEOSERVER_HOME=${CATALINA_HOME}/webapps/geoserver
+
 #ARG GEOSERVER_DATA_DIR=""
-### Global variables affecting WMS | https://docs.geoserver.org/latest/en/user/services/wms/global.html#wms-global-variables
-#ARG ENABLE_JSONP=true
-#ARG MAX_FILTER_RULES=20
-#ARG OPTIMIZE_LINE_WIDTH=false
+## Global variables affecting WMS | https://docs.geoserver.org/latest/en/user/services/wms/global.html#wms-global-variables
+ARG ENABLE_JSONP=true
+ARG MAX_FILTER_RULES=20
+ARG OPTIMIZE_LINE_WIDTH=false
 ### Proxy Base URL | https://docs.geoserver.org/latest/en/user/configuration/globalsettings.html#proxy-base-url
 #ARG DALLOW_ENV_PARAMETRIZATION=false
 #ARG PROXY_BASE_URL=""
@@ -99,14 +101,20 @@ COPY files/geoserver/web.xml ${CATALINA_HOME}/webapps/geoserver/WEB-INF
 ### CSRF Protection | https://docs.geoserver.org/stable/en/user/security/webadmin/csrf.html#csrf-protection
 #ARG CSRF_WHITELIST="*"
 
+ENV ENABLE_JSONP=${ENABLE_JSONP} \
+    MAX_FILTER_RULES=${MAX_FILTER_RULES} \
+    OPTIMIZE_LINE_WIDTH=${OPTIMIZE_LINE_WIDTH}
+
 ENV GS_OPTIONS=" \
+  -XX:PerfDataSamplingInterval=500 -Dorg.geotools.referencing.forceXY=true \
+  -DENABLE_JSONP=${ENABLE_JSONP} \
+  -DMAX_FILTER_RULES=${MAX_FILTER_RULES} \
+  -DOPTIMIZE_LINE_WIDTH=${OPTIMIZE_LINE_WIDTH} \
   -Duser.timezone=UTC \
   -Dorg.geotools.shapefile.datetime=true"
-#  -DGEOSERVER_LOG_LOCATION=${GEOSERVER_LOG_LOCATION} \
-#  -DGEOWEBCACHE_CONFIG_DIR=${GEOWEBCACHE_CONFIG_DIR} \
-#  -DGEOWEBCACHE_CACHE_DIR=${GEOWEBCACHE_CACHE_DIR} \
 #  -DNETCDF_DATA_DIR=${NETCDF_DATA_DIR} \
 #  -DGRIB_CACHE_DIR=${GRIB_CACHE_DIR} \
+#  -DALLOW_ENV_PARAMETRIZATION=${PROXY_BASE_URL_PARAMETRIZATION}
 
 ## Container Considerations | https://docs.geoserver.org/stable/en/user/production/container.html#optimize-your-jvm
 ARG GS_INITIAL_MEMORY=1G
@@ -129,7 +137,7 @@ RUN chmod +x start-geoserver.sh
 ## Decomment to test bash file. Make sure to comment all after RUN /start-geoserver.sh
 #RUN /start-geoserver.sh
 
-WORKDIR ${CATALINA_HOME}
+WORKDIR ${GEOSERVER_HOME}
 EXPOSE ${GS_HTTP_PORT}
 
 CMD ["/start-geoserver.sh", "run"]

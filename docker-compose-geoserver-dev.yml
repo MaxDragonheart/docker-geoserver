@@ -7,12 +7,14 @@ services:
       context: ./geoserver
       dockerfile: Dockerfile
       args:
-        GEOSERVER_VERSION: ${GEOSERVER_VERSION}
-        HTTP_PORT: ${HTTP_PORT}
+        GS_VERSION: ${GS_VERSION}
+        GS_HTTP_PORT: ${GS_HTTP_PORT}
+        GS_INITIAL_MEMORY: ${GS_INITIAL_MEMORY}
+        GS_MAXIMUM_MEMORY: ${GS_MAXIMUM_MEMORY}
     container_name: dev_geoserver
     restart: always
     ports:
-    - ${HTTP_PORT}:8080
+    - ${GS_HTTP_PORT}:8080
     volumes:
     - tomcat:/opt/tomcat
     - geoserver:/opt/tomcat/webapps/geoserver
