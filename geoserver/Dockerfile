@@ -13,7 +13,7 @@ RUN apt-get install -y unzip wget systemctl default-jdk
 ## https://docs.geoserver.org/latest/en/user/installation/war.html
 ## Environment Variables
 ARG TOMCAT_MAJOR=9
-ARG TOMCAT_VERSION=9.0.56
+ARG TOMCAT_VERSION=9.0.58
 ARG CATALINA_HOME=/opt/tomcat
 ARG GS_HTTP_PORT=8300
 
