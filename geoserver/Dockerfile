@@ -134,7 +134,7 @@ ENV JAVA_OPTS="-Xms${GS_INITIAL_MEMORY} -Xmx${GS_MAXIMUM_MEMORY} \
 
 COPY ./scripts/start-geoserver.sh ./
 RUN chmod +x start-geoserver.sh
-## Decomment to test bash file. Make sure to comment all after RUN /start-geoserver.sh
+## Decomment to test bash file. Make sure to comment all after `RUN /start-geoserver.sh`
 #RUN /start-geoserver.sh
 
 WORKDIR ${GEOSERVER_HOME}
