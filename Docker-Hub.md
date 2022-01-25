@@ -1,30 +1,12 @@
 # Geoserver
 
-## Docker
-Build: `docker build -t LAYER-NAME .`
-
-Run and access to container: `docker run -it LAYER-NAME`
-
-## Docker Compose
-Build: `docker-compose -f docker-compose.yml build`
-
-Run: `docker-compose -f docker-compose.yml up`
-
-Run permanently: `docker-compose -f docker-compose.yml up -d`
-
-Access to container: `docker exec -it COINTAINERID bin`
-
-Full Docker command list [here](https://docs.docker.com/engine/reference/commandline/docker/).
-
-## Geoserver
-
-### Credentials
+## Credentials
 
 Username: `admin`
 
 Password: `geoserver`
 
-### Pre-installed extensions
+## Pre-installed extensions
 
 - [GDAL](https://docs.geoserver.org/stable/en/user/data/raster/gdal.html)
 - [Importer](https://docs.geoserver.org/latest/en/user/extensions/importer/index.html)
@@ -53,7 +35,7 @@ Password: `geoserver`
 
         sudo docker-compose -f docker-compose-dev.yml up -d
 
-### Use earlier folder
+## Use earlier folder
 0. Put down Geoserver:
 
         docker-compose -f docker-compose.yml down
@@ -77,36 +59,3 @@ Password: `geoserver`
 5. Put UP Geoserver:
 
         sudo docker-compose -f docker-compose.yml up -d
-
-### Links
-- [Extensions list](https://docs.geoserver.org/latest/en/user/extensions/index.html#extensions)
-- [Running in a production environment](https://docs.geoserver.org/latest/en/user/production/index.html#production)
-- [GeoServer data directory](https://docs.geoserver.org/latest/en/user/datadirectory/index.html#datadir)
-
-## NGINX
-
-If Apache2 is up, it's necessary to put it down.
-Check Apache2 status: `sudo systemctl status apache2`
-Stop Apache2: `sudo systemctl stop apache2`
-
-
-### Create an SSL certificate with Certbot
-
-Enter to the image that use nginx:
-
-    docker exec -it <nginx_img_id> bin/bash
-
-Make certificate:
-
-    certbot --nginx -d domain.com -d www.domain.com
-
-Put down Geoserver and NGINX, then edit `WEB-INF/web.xml`. Uncomment `PROXY_BASE_URL` and add your domain: `https://example.com/geoserver`.
-Uncomment `GEOSERVER_CSRF_WHITELIST` and add your domani without http: `example.com`.
-
-Put up Geoserver and NGINX, go to `example.com`
-
-### Renew SSL certificate
-
-LetsEncrypt will only allow renewal when the certificate is within 30 days of expiry. Once renewed the new certificate will be valid for 90 days from the date of renewal.
-
-    certbot renew --nginx
