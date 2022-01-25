@@ -2,7 +2,7 @@ version: '3.7'
 
 services:
   geoserver:
-    image: gisconsultant/geoserver:${GEOSERVER_VERSION}
+    image: maxdragonheart/geoserver:${GEOSERVER_VERSION}
     build:
       context: ./geoserver
       dockerfile: Dockerfile
@@ -18,7 +18,7 @@ services:
     - geoserver:/opt/tomcat/webapps/geoserver
 
   nginx:
-    image: gisconsultant/nginx
+    image: maxdragonheart/nginx
     build:
       context: ./nginx
       dockerfile: Dockerfile
