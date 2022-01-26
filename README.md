@@ -110,3 +110,17 @@ Put up Geoserver and NGINX, go to `example.com`
 LetsEncrypt will only allow renewal when the certificate is within 30 days of expiry. Once renewed the new certificate will be valid for 90 days from the date of renewal.
 
     certbot renew --nginx
+
+## Docker Hub
+
+### Push new images
+
+Build: `docker build -t maxdragonheart/geoserver:<TAG>` .
+
+Push: `docker push maxdragonheart/geoserver:<TAG>`
+
+### Rename image's TAG to latest
+
+Rename: `docker tag maxdragonheart/geoserver:<TAG> maxdragonheart/geoserver:latest`
+
+Push: `docker push maxdragonheart/geoserver:latest`
