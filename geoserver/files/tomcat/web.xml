@@ -624,7 +624,7 @@
         <url-pattern>*.shtml</url-pattern>
     </filter-mapping>
 -->
-
+<!--
     <filter>
         <filter-name>CorsFilter</filter-name>
         <filter-class>org.apache.catalina.filters.CorsFilter</filter-class>
@@ -645,7 +645,7 @@
         <filter-name>CorsFilter</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
-
+-->
   <!-- ==================== Default Session Configuration ================= -->
   <!-- You can set the default session timeout (in minutes) for all newly   -->
   <!-- created sessions by modifying the value below.                       -->
