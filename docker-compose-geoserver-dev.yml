@@ -2,7 +2,7 @@ version: '3.7'
 
 services:
   geoserver:
-    image: maxdragonheart/dev-geoserver:${GEOSERVER_VERSION}
+    image: maxdragonheart/dev-geoserver:${GS_VERSION}
     build:
       context: ./geoserver
       dockerfile: Dockerfile
