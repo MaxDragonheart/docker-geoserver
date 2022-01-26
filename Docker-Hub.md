@@ -2,6 +2,8 @@
 
 Geoserver's version 2.20.1, that runs on port 8300 as default with minimum 2GB and maximum 4GB  of RAM.
 
+Version tagged `low_cost_server` has minimum 512MB and maximum 2GB  of RAM.
+
 ## Credentials
 
 Username: `admin`
