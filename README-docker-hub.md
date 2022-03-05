@@ -23,9 +23,17 @@ Password: `geoserver`
 - [INSPIRE](https://docs.geoserver.org/stable/en/user/extensions/inspire/index.html)
 
 ## Run project
+Use `.env` to customize your version:
+```
+GS_VERSION=2.20.1
+GS_HTTP_PORT=8300
+GS_INITIAL_MEMORY=1G
+GS_MAXIMUM_MEMORY=4G
+```
+
 Build: `docker-compose -f docker-compose.yml up -d --build`
 
-## Links
+## Official Geoserver Documentation
 - [Extensions list](https://docs.geoserver.org/latest/en/user/extensions/index.html#extensions)
 - [Running in a production environment](https://docs.geoserver.org/latest/en/user/production/index.html#production)
 - [GeoServer data directory](https://docs.geoserver.org/latest/en/user/datadirectory/index.html#datadir)
