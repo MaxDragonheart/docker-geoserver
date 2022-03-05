@@ -1,14 +1,4 @@
-# Geoserver
-
-Geoserver's version 2.20.1, that runs on port 8300 as default with minimum 2GB and maximum 4GB  of RAM.
-
-Version tagged `low_cost_server` has minimum 512MB and maximum 2GB  of RAM.
-
-## Credentials
-
-Username: `admin`
-
-Password: `geoserver`
+# Geoserver Extensions
 
 ## Pre-installed extensions
 
@@ -22,14 +12,14 @@ Password: `geoserver`
 - [WMTS Multidimensional](https://docs.geoserver.org/latest/en/user/extensions/wmts-multidimensional/install.html)
 - [INSPIRE](https://docs.geoserver.org/stable/en/user/extensions/inspire/index.html)
 
-### Install another extension
+## Install another extension
 0. Put down Geoserver:
 
         docker-compose -f docker-compose-dev.yml down
 
 1. Copy `.jar` into plugin's folder:
 
-         sudo cp -R DOWNLOAD_FOLDER/* /var/lib/docker/volumes/geoserver-drako_geoserver-plugin/_data/lib
+         cp -R DOWNLOAD_FOLDER/* /var/lib/docker/volumes/geoserver-drako_geoserver-plugin/_data/lib
 
 2. Change `lib` ownership:
 
@@ -37,29 +27,4 @@ Password: `geoserver`
 
 3. Put UP Geoserver:
 
-        sudo docker-compose -f docker-compose-dev.yml up -d
-
-## Use earlier folder
-0. Put down Geoserver:
-
-        docker-compose -f docker-compose.yml down
-
-1. Delete `datadir`:
-
-        rm -rf /var/lib/docker/volumes/geoserver-drako_geoserver/_data/data
-
-2. Create `datadir`:
-
-        mkdir data
-
-3. Copy all data from earlier folder to `datadir`:
-
-        cp -r EARLIER_FOLDER_NAME/* /var/lib/docker/volumes/geoserver-drako_geoserver/_data/data
-   
-4. Change `datadir` ownership:
-
-        chown -R USERNAME:USERNAME datadir/
-   
-5. Put UP Geoserver:
-
-        sudo docker-compose -f docker-compose.yml up -d
+        docker-compose -f docker-compose-dev.yml up -d
