@@ -1,0 +1,24 @@
+site_name: Geoserver Docker Image
+site_url: https://github.com/MaxDragonheart/docker-geoserver
+repo_url: https://github.com/MaxDragonheart/docker-geoserver
+repo_name: 'GitHub'
+site_description: Geoserver Docker Image.
+site_author: Massimiliano Moraca
+theme:
+    name: readthedocs
+nav:
+    - Home: 'index.md'
+    - User Guide:
+        - NGINX-Certbot: './guides/nginx-certbot.md'
+        - Extensions: './guides/geoserver-extension.md'
+        - Manage datadir: './guides/manage-datadir.md'
+    - Development: './guides/dockerhub.md'
+    - About:
+        - 'License': 'LICENSE'
+markdown_extensions:
+    - smarty
+    - toc:
+        permalink: "#"
+plugins:
+    - search:
+        indexing: 'full'
