@@ -4,8 +4,7 @@ repo_url: https://github.com/MaxDragonheart/docker-geoserver
 repo_name: 'GitHub'
 site_description: Geoserver Docker Image.
 site_author: Massimiliano Moraca
-theme:
-    name: readthedocs
+theme: readthedocs
 nav:
     - Home: 'index.md'
     - User Guide:
