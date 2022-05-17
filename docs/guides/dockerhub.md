@@ -2,7 +2,7 @@
 
 ## Push new images
 
-Build: `docker build -t maxdragonheart/geoserver:<TAG>` .
+Build: `docker build -t maxdragonheart/geoserver:<TAG> .`
 
 Push: `docker push maxdragonheart/geoserver:<TAG>`
 
