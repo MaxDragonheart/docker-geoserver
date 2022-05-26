@@ -1,54 +1,57 @@
 # syntax=docker/dockerfile:1
 
 # ULGIS as Layer
-FROM gisconsultant/ulgis:latest as gis-os
-## Disable Prompt During Packages Installation
+FROM maxdragonheart/ulgis:latest as gis-os
+# Disable Prompt During Packages Installation
 ARG DEBIAN_FRONTEND=noninteractive
-## Install useful stuffs
+# Install JAVA and related stuffs
+RUN apt-get install -y default-jdk libgdal-java
+# Install useful stuffs
 RUN apt-get install -y \
     systemctl  \
-    default-jdk
+    xsltproc
 
-## GIS-OS as Layer
-### Geoserver Web Archive Installation
-### https://docs.geoserver.org/latest/en/user/installation/war.html
-### Environment Variables
-#ARG TOMCAT_MAJOR=9
-#ARG TOMCAT_VERSION=9.0.58
-#ARG CATALINA_HOME=/opt/tomcat
-#ARG GS_HTTP_PORT=8300
+# GIS-OS as Layer
+## Geoserver Web Archive Installation
+## https://docs.geoserver.org/latest/en/user/installation/war.html
+## Environment Variables
+ARG TOMCAT_MAJOR=9
+ARG TOMCAT_VERSION=9.0.63
+ARG CATALINA_HOME=/opt/tomcat
+ARG GS_HTTP_PORT=8300
 
-#ENV \
-#    TOMCAT_VERSION=${TOMCAT_VERSION} \
-#    TOMCAT_LINK="https://dlcdn.apache.org/tomcat/tomcat-${TOMCAT_MAJOR}/v${TOMCAT_VERSION}/bin/apache-tomcat-${TOMCAT_VERSION}.tar.gz" \
-#    TOMCAT_DOWNLOAD_FOLDER=tomcat-${TOMCAT_VERSION} \
-#    CATALINA_HOME=${CATALINA_HOME} \
-#    GS_HTTP_PORT=${GS_HTTP_PORT}
+ENV \
+    TOMCAT_VERSION=${TOMCAT_VERSION} \
+    TOMCAT_LINK="https://dlcdn.apache.org/tomcat/tomcat-${TOMCAT_MAJOR}/v${TOMCAT_VERSION}/bin/apache-tomcat-${TOMCAT_VERSION}.tar.gz" \
+    TOMCAT_DOWNLOAD_FOLDER=tomcat-${TOMCAT_VERSION} \
+    CATALINA_HOME=${CATALINA_HOME} \
+    GS_HTTP_PORT=${GS_HTTP_PORT}
 
-#FROM gis-os as tomcat
-#RUN mkdir -p ${CATALINA_HOME}
-#
-#RUN mkdir ${TOMCAT_DOWNLOAD_FOLDER}
-#WORKDIR ${TOMCAT_DOWNLOAD_FOLDER}
-#RUN wget ${TOMCAT_LINK} \
-#    && tar xzvf apache-tomcat-${TOMCAT_VERSION}.tar.gz -C ${CATALINA_HOME} --strip-components=1
-#WORKDIR /
-#RUN rm -rf ${TOMCAT_DOWNLOAD_FOLDER}
-##COPY files/tomcat/context.xml ${CATALINA_HOME}/webapps/manager/META-INF
-#COPY files/tomcat/tomcat-users.xml ${CATALINA_HOME}/conf
-#COPY files/tomcat/web.xml ${CATALINA_HOME}/conf
+FROM gis-os as tomcat
+RUN mkdir -p ${CATALINA_HOME}
 
-## Image useful for stuffs collection
-#FROM ubuntu:20.04 as tmp_image
-### Disable Prompt During Packages Installation
-#ARG DEBIAN_FRONTEND=noninteractive
-### Update&Upgrade Ubuntu and install useful stuffs
-#RUN apt-get update && apt-get upgrade -y \
-#    && apt-get install -y unzip wget
+RUN mkdir ${TOMCAT_DOWNLOAD_FOLDER}
+WORKDIR ${TOMCAT_DOWNLOAD_FOLDER}
+RUN wget ${TOMCAT_LINK} \
+    && tar xzvf apache-tomcat-${TOMCAT_VERSION}.tar.gz -C ${CATALINA_HOME} --strip-components=1
+WORKDIR ../
+RUN rm -rf ${TOMCAT_DOWNLOAD_FOLDER}
+#COPY files/tomcat/context.xml ${CATALINA_HOME}/webapps/manager/META-INF
+COPY files/tomcat/tomcat-users.xml ${CATALINA_HOME}/conf
+COPY files/tomcat/web.xml ${CATALINA_HOME}/conf
 
-#ARG GS_VERSION=2.20.1
+# Image useful for stuffs collection
+FROM ubuntu:20.04 as tmp_image
+## Disable Prompt During Packages Installation
+ARG DEBIAN_FRONTEND=noninteractive
+## Update&Upgrade Ubuntu
+RUN apt-get update && apt-get upgrade -y
+## Install useful stuffs
+RUN apt-get install -y unzip wget
 
-#ENV GS_VERSION=${GS_VERSION}
+ARG GS_VERSION=2.20.1
+
+ENV GS_VERSION=${GS_VERSION}
 
 #### Download Geoserver
 #RUN mkdir -p data/geoserver
