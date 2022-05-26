@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+#GS_VERSION=2.20.1
 echo " ---> Extensions for Geoserver's version: $GS_VERSION"
 
 declare -a EXTENSIONS_LINK_LIST

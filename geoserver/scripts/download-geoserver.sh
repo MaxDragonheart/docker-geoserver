@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-
+#GS_VERSION=2.20.1
 GEOSERVER_LINK="http://sourceforge.net/projects/geoserver/files/GeoServer/${GS_VERSION}/geoserver-${GS_VERSION}-war.zip"
 GEOSERVER_WAR=data/geoserver.war
 GEOSERVER_FOLDER=data/geoserver
