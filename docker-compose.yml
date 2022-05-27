@@ -3,11 +3,12 @@ version: '3.7'
 services:
   geoserver:
     image: maxdragonheart/geoserver:latest
-#    environment:
-#      GS_VERSION: ${GS_VERSION}
-#      GS_HTTP_PORT: ${GS_HTTP_PORT}
-#      GS_INITIAL_MEMORY: ${GS_INITIAL_MEMORY}
-#      GS_MAXIMUM_MEMORY: ${GS_MAXIMUM_MEMORY}
+    environment:
+      GS_VERSION: ${GS_VERSION}
+      GS_DEMO_DATA: ${GS_DEMO_DATA}
+      GS_HTTP_PORT: ${GS_HTTP_PORT}
+      GS_INITIAL_MEMORY: ${GS_INITIAL_MEMORY}
+      GS_MAXIMUM_MEMORY: ${GS_MAXIMUM_MEMORY}
     container_name: geoserver
     restart: always
     volumes:
