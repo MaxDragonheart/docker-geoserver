@@ -141,7 +141,9 @@ ENV JAVA_OPTS="-Xms${GS_INITIAL_MEMORY} -Xmx${GS_MAXIMUM_MEMORY} \
 COPY ./scripts/start-geoserver.sh ./
 RUN chmod +x start-geoserver.sh
 
-WORKDIR ${GEOSERVER_HOME}
+RUN mkdir "geoserver"
+WORKDIR ./geoserver
+#WORKDIR ${GEOSERVER_HOME}
 EXPOSE ${GS_HTTP_PORT}
 
 CMD ["/start-geoserver.sh", "run"]
