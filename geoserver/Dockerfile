@@ -51,8 +51,10 @@ RUN apt-get update && apt-get upgrade -y
 RUN apt-get install -y unzip wget
 
 ARG GS_VERSION=2.20.4
+ARG GS_DEMO_DATA=False
 
-ENV GS_VERSION=${GS_VERSION}
+ENV GS_VERSION=${GS_VERSION} \
+    GS_DEMO_DATA=${GS_DEMO_DATA}
 
 ## Download Geoserver
 RUN mkdir -p data/geoserver
@@ -141,9 +143,7 @@ ENV JAVA_OPTS="-Xms${GS_INITIAL_MEMORY} -Xmx${GS_MAXIMUM_MEMORY} \
 COPY ./scripts/start-geoserver.sh ./
 RUN chmod +x start-geoserver.sh
 
-RUN mkdir "geoserver"
-WORKDIR ./geoserver
-#WORKDIR ${GEOSERVER_HOME}
+WORKDIR ${GEOSERVER_HOME}
 EXPOSE ${GS_HTTP_PORT}
 
 CMD ["/start-geoserver.sh", "run"]

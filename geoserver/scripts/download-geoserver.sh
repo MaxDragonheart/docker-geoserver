@@ -32,7 +32,7 @@ echo " ------> $PWD/$GEOSERVER_WAR"
 rm -rf downloads/
 rm -rf "$GEOSERVER_WAR"
 
-if [ "$GS_DEMO_DATA" = True ];
+if [ "$GS_DEMO_DATA" = False ];
 then
   echo " ---> Remove demo data"
 

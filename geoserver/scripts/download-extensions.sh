@@ -20,27 +20,27 @@ EXTENSIONS_LINK_LIST=(
   )
 ARRAY_LEN=${#EXTENSIONS_LINK_LIST[@]}
 
-echo " ---> Extention to download: $ARRAY_LEN"
-
-mkdir downloads/
-
-for url in "${EXTENSIONS_LINK_LIST[@]}";
-do
-  echo " ---> Start download of $url"
-  wget "$url" -P downloads/;
-done
-
-#echo " ---> Start download extensions"
-#echo " ---> Put extensions list from data/extensions.txt in downloads/"
-#wget -i data/extensions.txt -P downloads/
-#rm data/extensions.txt
-
-echo " ---> Unzip downloaded extensions from downloads/ to data/plugins"
-for zipfiles in /downloads/*.zip;
-do
-  unzip "$zipfiles" '*.jar' -d data/plugins;
-done
-
-rm -rf downloads/
-
-echo " ---> Extensions download completed"
+#echo " ---> Extention to download: $ARRAY_LEN"
+#
+#mkdir downloads/
+#
+#for url in "${EXTENSIONS_LINK_LIST[@]}";
+#do
+#  echo " ---> Start download of $url"
+#  wget "$url" -P downloads/;
+#done
+#
+##echo " ---> Start download extensions"
+##echo " ---> Put extensions list from data/extensions.txt in downloads/"
+##wget -i data/extensions.txt -P downloads/
+##rm data/extensions.txt
+#
+#echo " ---> Unzip downloaded extensions from downloads/ to data/plugins"
+#for zipfiles in /downloads/*.zip;
+#do
+#  unzip "$zipfiles" '*.jar' -d data/plugins;
+#done
+#
+#rm -rf downloads/
+#
+#echo " ---> Extensions download completed"

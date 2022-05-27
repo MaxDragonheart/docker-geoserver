@@ -8,6 +8,7 @@ services:
       dockerfile: Dockerfile
       args:
         GS_VERSION: ${GS_VERSION}
+        GS_DEMO_DATA: ${GS_DEMO_DATA}
         GS_HTTP_PORT: ${GS_HTTP_PORT}
         GS_INITIAL_MEMORY: ${GS_INITIAL_MEMORY}
         GS_MAXIMUM_MEMORY: ${GS_MAXIMUM_MEMORY}
