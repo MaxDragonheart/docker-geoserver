@@ -1,8 +1,6 @@
 # Geoserver Docker Image
 
-Geoserver's version 2.20.1, that runs on port 8300 as default with minimum 2GB and maximum 4GB  of RAM.
-
-Version tagged `low_cost_server` has minimum 512MB and maximum 2GB  of RAM.
+[Geoserver](https://geoserver.org/) runs on port 8300 as default with minimum 2GB and maximum 4GB  of RAM.
 
 ## Credentials
 
@@ -25,7 +23,8 @@ Password: `geoserver`
 ## Run project
 Use `.env` to customize your version:
 ```
-GS_VERSION=2.20.1
+GS_VERSION=2.20.4
+GS_DEMO_DATA=False
 GS_HTTP_PORT=8300
 GS_INITIAL_MEMORY=1G
 GS_MAXIMUM_MEMORY=4G

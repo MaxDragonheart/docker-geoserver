@@ -1,19 +1,23 @@
 # syntax=docker/dockerfile:1
 
 # ULGIS as Layer
-FROM gisconsultant/ulgis as gis-os
-## Disable Prompt During Packages Installation
+FROM maxdragonheart/ulgis:latest as gis-os
+WORKDIR /
+# Disable Prompt During Packages Installation
 ARG DEBIAN_FRONTEND=noninteractive
-## Update&Upgrade and install useful stuffs
-RUN apt-get update && apt-get upgrade -y
-RUN apt-get install -y unzip wget systemctl default-jdk
+# Install JAVA and related stuffs
+RUN apt-get install -y default-jdk libgdal-java
+# Install useful stuffs
+RUN apt-get install -y \
+    systemctl  \
+    xsltproc
 
 # GIS-OS as Layer
 ## Geoserver Web Archive Installation
 ## https://docs.geoserver.org/latest/en/user/installation/war.html
 ## Environment Variables
 ARG TOMCAT_MAJOR=9
-ARG TOMCAT_VERSION=9.0.58
+ARG TOMCAT_VERSION=9.0.63
 ARG CATALINA_HOME=/opt/tomcat
 ARG GS_HTTP_PORT=8300
 
@@ -31,7 +35,7 @@ RUN mkdir ${TOMCAT_DOWNLOAD_FOLDER}
 WORKDIR ${TOMCAT_DOWNLOAD_FOLDER}
 RUN wget ${TOMCAT_LINK} \
     && tar xzvf apache-tomcat-${TOMCAT_VERSION}.tar.gz -C ${CATALINA_HOME} --strip-components=1
-WORKDIR /
+WORKDIR ../
 RUN rm -rf ${TOMCAT_DOWNLOAD_FOLDER}
 #COPY files/tomcat/context.xml ${CATALINA_HOME}/webapps/manager/META-INF
 COPY files/tomcat/tomcat-users.xml ${CATALINA_HOME}/conf
@@ -41,21 +45,24 @@ COPY files/tomcat/web.xml ${CATALINA_HOME}/conf
 FROM ubuntu:20.04 as tmp_image
 ## Disable Prompt During Packages Installation
 ARG DEBIAN_FRONTEND=noninteractive
-## Update&Upgrade Ubuntu and install useful stuffs
-RUN apt-get update && apt-get upgrade -y \
-    && apt-get install -y unzip wget
+## Update&Upgrade Ubuntu
+RUN apt-get update && apt-get upgrade -y
+## Install useful stuffs
+RUN apt-get install -y unzip wget
 
-ARG GS_VERSION=2.20.1
+ARG GS_VERSION=2.20.4
+ARG GS_DEMO_DATA=False
 
-ENV GS_VERSION=${GS_VERSION}
+ENV GS_VERSION=${GS_VERSION} \
+    GS_DEMO_DATA=${GS_DEMO_DATA}
 
-### Download Geoserver
+## Download Geoserver
 RUN mkdir -p data/geoserver
 COPY scripts/download-geoserver.sh /download-geoserver.sh
 RUN chmod +x download-geoserver.sh
 RUN ./download-geoserver.sh
 ## Remove default datadir with demo data
-RUN rm -rf /data/geoserver/data
+#RUN rm -rf /data/geoserver/data
 
 ## Download extensions
 RUN mkdir -p data/plugins
@@ -66,7 +73,7 @@ RUN ./download-extensions.sh
 # Tomcat as Layer
 FROM tomcat as geoserver
 ENV LIBJPEG_VERSION=2.0.6
-RUN apt-get install -y libgdal-java cmake nasm \
+RUN apt-get install -y cmake nasm \
     && wget https://nav.dl.sourceforge.net/project/libjpeg-turbo/${LIBJPEG_VERSION}/libjpeg-turbo-${LIBJPEG_VERSION}.tar.gz \
     && tar -zxf ./libjpeg-turbo-${LIBJPEG_VERSION}.tar.gz \
     && cd libjpeg-turbo-${LIBJPEG_VERSION} && cmake -G"Unix Makefiles" && make deb \
@@ -80,6 +87,7 @@ RUN apt-get install -y libgdal-java cmake nasm \
     && rm -rf /var/tmp/* \
     && rm -rf /usr/share/man/* \
     && rm -rf /usr/share/doc/*
+RUN rm -rf libjpeg-turbo-${LIBJPEG_VERSION} libjpeg-turbo-${LIBJPEG_VERSION}.tar.gz
 
 RUN mkdir ${CATALINA_HOME}/webapps/geoserver
 COPY --from=tmp_image data/geoserver ${CATALINA_HOME}/webapps/geoserver
@@ -93,12 +101,12 @@ ENV GEOSERVER_HOME=${CATALINA_HOME}/webapps/geoserver
 ARG ENABLE_JSONP=true
 ARG MAX_FILTER_RULES=20
 ARG OPTIMIZE_LINE_WIDTH=false
-### Proxy Base URL | https://docs.geoserver.org/latest/en/user/configuration/globalsettings.html#proxy-base-url
+## Proxy Base URL | https://docs.geoserver.org/latest/en/user/configuration/globalsettings.html#proxy-base-url
 #ARG DALLOW_ENV_PARAMETRIZATION=false
 #ARG PROXY_BASE_URL=""
-### Disable the GeoServer web administration interface | https://docs.geoserver.org/latest/en/user/production/config.html#disable-the-geoserver-web-administration-interface
+## Disable the GeoServer web administration interface | https://docs.geoserver.org/latest/en/user/production/config.html#disable-the-geoserver-web-administration-interface
 #ARG DISABLE_WEB_INTERFACE=false
-### CSRF Protection | https://docs.geoserver.org/stable/en/user/security/webadmin/csrf.html#csrf-protection
+## CSRF Protection | https://docs.geoserver.org/stable/en/user/security/webadmin/csrf.html#csrf-protection
 #ARG CSRF_WHITELIST="*"
 
 ENV ENABLE_JSONP=${ENABLE_JSONP} \
@@ -134,8 +142,6 @@ ENV JAVA_OPTS="-Xms${GS_INITIAL_MEMORY} -Xmx${GS_MAXIMUM_MEMORY} \
 
 COPY ./scripts/start-geoserver.sh ./
 RUN chmod +x start-geoserver.sh
-## Decomment to test bash file. Make sure to comment all after `RUN /start-geoserver.sh`
-#RUN /start-geoserver.sh
 
 WORKDIR ${GEOSERVER_HOME}
 EXPOSE ${GS_HTTP_PORT}
