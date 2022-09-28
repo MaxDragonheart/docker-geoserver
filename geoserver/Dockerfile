@@ -17,7 +17,9 @@ RUN apt-get install -y \
 ## https://docs.geoserver.org/latest/en/user/installation/war.html
 ## Environment Variables
 ARG TOMCAT_MAJOR=9
-ARG TOMCAT_VERSION=9.0.63
+ARG TOMCAT_MINOR=0
+ARG TOMCAT_PATCH=67
+ARG TOMCAT_VERSION=${TOMCAT_MAJOR}.${TOMCAT_MINOR}.${TOMCAT_PATCH}
 ARG CATALINA_HOME=/opt/tomcat
 ARG GS_HTTP_PORT=8300
 
