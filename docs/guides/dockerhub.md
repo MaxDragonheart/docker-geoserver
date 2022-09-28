@@ -1,4 +1,7 @@
 # Docker Hub
+## Login to Docker Hub
+
+`docker login`
 
 ## Push new images
 

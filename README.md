@@ -32,6 +32,8 @@ GS_MAXIMUM_MEMORY=4G
 
 Build: `docker-compose -f docker-compose.yml up -d --build`
 
+Build for Compose 1.2: `docker compose -f docker-compose.yml up -d --build`
+
 ## Official Geoserver Documentation
 - [Extensions list](https://docs.geoserver.org/latest/en/user/extensions/index.html#extensions)
 - [Running in a production environment](https://docs.geoserver.org/latest/en/user/production/index.html#production)
