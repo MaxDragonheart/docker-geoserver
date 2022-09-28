@@ -12,6 +12,9 @@ services:
         GS_HTTP_PORT: ${GS_HTTP_PORT}
         GS_INITIAL_MEMORY: ${GS_INITIAL_MEMORY}
         GS_MAXIMUM_MEMORY: ${GS_MAXIMUM_MEMORY}
+        TOMCAT_MAJOR: ${TOMCAT_MAJOR}
+        TOMCAT_MINOR: ${TOMCAT_MINOR}
+        TOMCAT_PATCH: ${TOMCAT_PATCH}
     container_name: geoserver
     restart: always
     volumes:
