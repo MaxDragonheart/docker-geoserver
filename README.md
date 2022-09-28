@@ -28,6 +28,9 @@ GS_DEMO_DATA=False
 GS_HTTP_PORT=8300
 GS_INITIAL_MEMORY=1G
 GS_MAXIMUM_MEMORY=4G
+TOMCAT_MAJOR=9
+TOMCAT_MINOR=0
+TOMCAT_PATCH=67
 ```
 
 Build: `docker-compose -f docker-compose.yml up -d --build`
