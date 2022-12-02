@@ -2,6 +2,8 @@
 
 # ULGIS as Layer
 FROM maxdragonheart/ulgis:latest as gis-os
+RUN apt-get update -y && apt-get upgrade -y && apt-get -y autoremove
+
 WORKDIR /
 # Disable Prompt During Packages Installation
 ARG DEBIAN_FRONTEND=noninteractive
@@ -18,7 +20,7 @@ RUN apt-get install -y \
 ## Environment Variables
 ARG TOMCAT_MAJOR=9
 ARG TOMCAT_MINOR=0
-ARG TOMCAT_PATCH=67
+ARG TOMCAT_PATCH=69
 ARG TOMCAT_VERSION=${TOMCAT_MAJOR}.${TOMCAT_MINOR}.${TOMCAT_PATCH}
 ARG CATALINA_HOME=/opt/tomcat
 ARG GS_HTTP_PORT=8300
