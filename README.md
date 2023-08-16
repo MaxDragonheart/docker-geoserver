@@ -37,6 +37,9 @@ Build: `docker-compose -f docker-compose.yml up -d --build`
 
 Build for Compose 1.2: `docker compose -f docker-compose.yml up -d --build`
 
+### Active PROXY_BASE_URL and GEOSERVER_CSRF_WHITELIST
+Edit `web.xml` using the right PROXY_BASE_URL and GEOSERVER_CSRF_WHITELIST. After the edit use `docker compose -f docker_compose_file.yml restart`.
+
 ## Official Geoserver Documentation
 - [Extensions list](https://docs.geoserver.org/latest/en/user/extensions/index.html#extensions)
 - [Running in a production environment](https://docs.geoserver.org/latest/en/user/production/index.html#production)
