@@ -10,90 +10,89 @@ ARG DEBIAN_FRONTEND=noninteractive
 # Install JAVA and related stuffs
 RUN apt install -y  default-jdk
 # Install GDAL stuffs
-RUN apt install -y libgdal-java
+RUN apt install -y libgdal-dev
+# Install useful stuffs
+RUN apt install -y \
+    systemctl  \
+    xsltproc
+
+# GIS-OS as Layer
+FROM gis-os as tomcat
+## Geoserver Web Archive Installation
+## https://docs.geoserver.org/latest/en/user/installation/war.html
+## Environment Variables
+ARG TOMCAT_MAJOR=9
+ARG TOMCAT_MINOR=0
+ARG TOMCAT_PATCH=79
+ARG TOMCAT_VERSION=${TOMCAT_MAJOR}.${TOMCAT_MINOR}.${TOMCAT_PATCH}
+ARG CATALINA_HOME=/opt/tomcat
+ARG GS_HTTP_PORT=8300
+
+ENV \
+    TOMCAT_VERSION=${TOMCAT_VERSION} \
+    TOMCAT_LINK="https://dlcdn.apache.org/tomcat/tomcat-${TOMCAT_MAJOR}/v${TOMCAT_VERSION}/bin/apache-tomcat-${TOMCAT_VERSION}.tar.gz" \
+    TOMCAT_DOWNLOAD_FOLDER=tomcat-${TOMCAT_VERSION} \
+    CATALINA_HOME=${CATALINA_HOME} \
+    GS_HTTP_PORT=${GS_HTTP_PORT}
+
+RUN mkdir -p ${CATALINA_HOME}
+
+RUN mkdir ${TOMCAT_DOWNLOAD_FOLDER}
+WORKDIR ${TOMCAT_DOWNLOAD_FOLDER}
+RUN echo ${TOMCAT_LINK}
+RUN wget ${TOMCAT_LINK} \
+    && tar xzvf apache-tomcat-${TOMCAT_VERSION}.tar.gz -C ${CATALINA_HOME} --strip-components=1
+WORKDIR ../
+RUN rm -rf ${TOMCAT_DOWNLOAD_FOLDER}
+#COPY files/tomcat/context.xml ${CATALINA_HOME}/webapps/manager/META-INF
+COPY files/tomcat/tomcat-users.xml ${CATALINA_HOME}/conf
+COPY files/tomcat/web.xml ${CATALINA_HOME}/conf
+
+# Image useful for stuffs collection
+FROM ubuntu:latest as tmp_image
+## Disable Prompt During Packages Installation
+ARG DEBIAN_FRONTEND=noninteractive
+## Update&Upgrade Ubuntu
+RUN apt update && apt upgrade -y
 ## Install useful stuffs
-#RUN apt install -y \
-#    systemctl  \
-#    xsltproc
+RUN apt install -y unzip wget
 
-## GIS-OS as Layer
-### Geoserver Web Archive Installation
-### https://docs.geoserver.org/latest/en/user/installation/war.html
-### Environment Variables
-#ARG TOMCAT_MAJOR=9
-#ARG TOMCAT_MINOR=0
-#ARG TOMCAT_PATCH=69
-#ARG TOMCAT_VERSION=${TOMCAT_MAJOR}.${TOMCAT_MINOR}.${TOMCAT_PATCH}
-#ARG CATALINA_HOME=/opt/tomcat
-#ARG GS_HTTP_PORT=8300
-#
-#ENV \
-#    TOMCAT_VERSION=${TOMCAT_VERSION} \
-#    TOMCAT_LINK="https://dlcdn.apache.org/tomcat/tomcat-${TOMCAT_MAJOR}/v${TOMCAT_VERSION}/bin/apache-tomcat-${TOMCAT_VERSION}.tar.gz" \
-#    TOMCAT_DOWNLOAD_FOLDER=tomcat-${TOMCAT_VERSION} \
-#    CATALINA_HOME=${CATALINA_HOME} \
-#    GS_HTTP_PORT=${GS_HTTP_PORT}
+ARG GS_VERSION=2.23.4
+ARG GS_DEMO_DATA=False
 
-#FROM gis-os as tomcat
-#RUN mkdir -p ${CATALINA_HOME}
-#
-#RUN mkdir ${TOMCAT_DOWNLOAD_FOLDER}
-#WORKDIR ${TOMCAT_DOWNLOAD_FOLDER}
-#RUN wget ${TOMCAT_LINK} \
-#    && tar xzvf apache-tomcat-${TOMCAT_VERSION}.tar.gz -C ${CATALINA_HOME} --strip-components=1
-#WORKDIR ../
-#RUN rm -rf ${TOMCAT_DOWNLOAD_FOLDER}
-##COPY files/tomcat/context.xml ${CATALINA_HOME}/webapps/manager/META-INF
-#COPY files/tomcat/tomcat-users.xml ${CATALINA_HOME}/conf
-#COPY files/tomcat/web.xml ${CATALINA_HOME}/conf
+ENV GS_VERSION=${GS_VERSION} \
+    GS_DEMO_DATA=${GS_DEMO_DATA}
 
-## Image useful for stuffs collection
-#FROM maxdragonheart/ulgis:latest as tmp_image
-### Disable Prompt During Packages Installation
-#ARG DEBIAN_FRONTEND=noninteractive
-### Update&Upgrade Ubuntu
-#RUN apt update && apt upgrade -y
-### Install useful stuffs
-#RUN apt install -y unzip wget
+## Download Geoserver
+RUN mkdir -p data/geoserver
+COPY scripts/download-geoserver.sh /download-geoserver.sh
+RUN chmod +x download-geoserver.sh
+RUN ./download-geoserver.sh
 
-#ARG GS_VERSION=2.20.4
-#ARG GS_DEMO_DATA=False
-#
-#ENV GS_VERSION=${GS_VERSION} \
-#    GS_DEMO_DATA=${GS_DEMO_DATA}
+## Download extensions
+RUN mkdir -p data/plugins
+COPY scripts/download-extensions.sh /download-extensions.sh
+RUN chmod +x download-extensions.sh
+RUN ./download-extensions.sh
 
-### Download Geoserver
-#RUN mkdir -p data/geoserver
-#COPY scripts/download-geoserver.sh /download-geoserver.sh
-#RUN chmod +x download-geoserver.sh
-#RUN ./download-geoserver.sh
-### Remove default datadir with demo data
-##RUN rm -rf /data/geoserver/data
-
-### Download extensions
-#RUN mkdir -p data/plugins
-#COPY scripts/download-extensions.sh /download-extensions.sh
-#RUN chmod +x download-extensions.sh
-#RUN ./download-extensions.sh
-
-## Tomcat as Layer
-#FROM tomcat as geoserver
-#ENV LIBJPEG_VERSION=2.0.6
-#RUN apt install -y cmake nasm \
-#    && wget https://nav.dl.sourceforge.net/project/libjpeg-turbo/${LIBJPEG_VERSION}/libjpeg-turbo-${LIBJPEG_VERSION}.tar.gz \
-#    && tar -zxf ./libjpeg-turbo-${LIBJPEG_VERSION}.tar.gz \
-#    && cd libjpeg-turbo-${LIBJPEG_VERSION} && cmake -G"Unix Makefiles" && make deb \
-#    && dpkg -i ./libjpeg*.deb && apt -f install \
-#    && apt -y purge cmake nasm\
-#    && apt clean \
-#    && apt -y autoclean \
-#    && apt -y autoremove \
-#    && rm -rf /var/lib/apt/lists/* \
-#    && rm -rf /tmp/* \
-#    && rm -rf /var/tmp/* \
-#    && rm -rf /usr/share/man/* \
-#    && rm -rf /usr/share/doc/*
-#RUN rm -rf libjpeg-turbo-${LIBJPEG_VERSION} libjpeg-turbo-${LIBJPEG_VERSION}.tar.gz
+# Tomcat as Layer
+FROM tomcat as geoserver
+ENV LIBJPEG_VERSION=2.0.6
+RUN apt install -y cmake nasm \
+    && wget https://nav.dl.sourceforge.net/project/libjpeg-turbo/${LIBJPEG_VERSION}/libjpeg-turbo-${LIBJPEG_VERSION}.tar.gz \
+    && tar -zxf ./libjpeg-turbo-${LIBJPEG_VERSION}.tar.gz \
+    && cd libjpeg-turbo-${LIBJPEG_VERSION} && cmake -G"Unix Makefiles" && make deb \
+    && dpkg -i ./libjpeg*.deb && apt -f install \
+    && apt -y purge cmake nasm\
+    && apt clean \
+    && apt -y autoclean \
+    && apt -y autoremove \
+    && rm -rf /var/lib/apt/lists/* \
+    && rm -rf /tmp/* \
+    && rm -rf /var/tmp/* \
+    && rm -rf /usr/share/man/* \
+    && rm -rf /usr/share/doc/*
+RUN rm -rf libjpeg-turbo-${LIBJPEG_VERSION} libjpeg-turbo-${LIBJPEG_VERSION}.tar.gz
 
 #RUN mkdir ${CATALINA_HOME}/webapps/geoserver
 #COPY --from=tmp_image data/geoserver ${CATALINA_HOME}/webapps/geoserver
