@@ -10,7 +10,9 @@ ARG DEBIAN_FRONTEND=noninteractive
 # Install JAVA and related stuffs
 RUN apt install -y  default-jdk
 # Install GDAL stuffs
-RUN apt install -y libgdal-dev
+RUN apt install -y  \
+    libgdal-dev \
+    libgdal-java
 # Install useful stuffs
 RUN apt install -y \
     systemctl  \
