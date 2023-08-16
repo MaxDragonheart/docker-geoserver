@@ -1,26 +1,41 @@
 # syntax=docker/dockerfile:1
 
-# ULGIS as Layer
-FROM maxdragonheart/ulgis:latest as gis-os
-RUN apt-get update -y && apt-get upgrade -y && apt-get -y autoremove
+## ULGIS as Layer
+#FROM maxdragonheart/ulgis:latest as gis-os
+FROM ubuntu:20.04 as base-os
+RUN apt update -y && apt upgrade -y && apt -y autoremove
+
+FROM base-os as gis-os
+# Install useful packages
+RUN apt install -y \
+    nano \
+    unzip \
+    wget \
+    curl \
+    aptitude
 
 WORKDIR /
 # Disable Prompt During Packages Installation
 ARG DEBIAN_FRONTEND=noninteractive
 # Install JAVA and related stuffs
-RUN apt-get install -y default-jdk libgdal-java
+RUN apt install -y  openjdk-11-jdk
+# Install GDAL stuffs
+RUN apt install -y  \
+    libgdal-dev \
+    libgdal-java
 # Install useful stuffs
-RUN apt-get install -y \
+RUN apt install -y \
     systemctl  \
     xsltproc
 
 # GIS-OS as Layer
+FROM gis-os as tomcat
 ## Geoserver Web Archive Installation
 ## https://docs.geoserver.org/latest/en/user/installation/war.html
 ## Environment Variables
 ARG TOMCAT_MAJOR=9
 ARG TOMCAT_MINOR=0
-ARG TOMCAT_PATCH=69
+ARG TOMCAT_PATCH=79
 ARG TOMCAT_VERSION=${TOMCAT_MAJOR}.${TOMCAT_MINOR}.${TOMCAT_PATCH}
 ARG CATALINA_HOME=/opt/tomcat
 ARG GS_HTTP_PORT=8300
@@ -32,11 +47,11 @@ ENV \
     CATALINA_HOME=${CATALINA_HOME} \
     GS_HTTP_PORT=${GS_HTTP_PORT}
 
-FROM gis-os as tomcat
 RUN mkdir -p ${CATALINA_HOME}
 
 RUN mkdir ${TOMCAT_DOWNLOAD_FOLDER}
 WORKDIR ${TOMCAT_DOWNLOAD_FOLDER}
+RUN echo ${TOMCAT_LINK}
 RUN wget ${TOMCAT_LINK} \
     && tar xzvf apache-tomcat-${TOMCAT_VERSION}.tar.gz -C ${CATALINA_HOME} --strip-components=1
 WORKDIR ../
@@ -46,15 +61,13 @@ COPY files/tomcat/tomcat-users.xml ${CATALINA_HOME}/conf
 COPY files/tomcat/web.xml ${CATALINA_HOME}/conf
 
 # Image useful for stuffs collection
-FROM ubuntu:20.04 as tmp_image
+FROM base-os as tmp_image
 ## Disable Prompt During Packages Installation
 ARG DEBIAN_FRONTEND=noninteractive
-## Update&Upgrade Ubuntu
-RUN apt-get update && apt-get upgrade -y
 ## Install useful stuffs
-RUN apt-get install -y unzip wget
+RUN apt install -y unzip wget
 
-ARG GS_VERSION=2.20.4
+ARG GS_VERSION=2.23.4
 ARG GS_DEMO_DATA=False
 
 ENV GS_VERSION=${GS_VERSION} \
@@ -65,8 +78,6 @@ RUN mkdir -p data/geoserver
 COPY scripts/download-geoserver.sh /download-geoserver.sh
 RUN chmod +x download-geoserver.sh
 RUN ./download-geoserver.sh
-## Remove default datadir with demo data
-#RUN rm -rf /data/geoserver/data
 
 ## Download extensions
 RUN mkdir -p data/plugins
@@ -77,15 +88,15 @@ RUN ./download-extensions.sh
 # Tomcat as Layer
 FROM tomcat as geoserver
 ENV LIBJPEG_VERSION=2.0.6
-RUN apt-get install -y cmake nasm \
+RUN apt install -y cmake nasm \
     && wget https://nav.dl.sourceforge.net/project/libjpeg-turbo/${LIBJPEG_VERSION}/libjpeg-turbo-${LIBJPEG_VERSION}.tar.gz \
     && tar -zxf ./libjpeg-turbo-${LIBJPEG_VERSION}.tar.gz \
     && cd libjpeg-turbo-${LIBJPEG_VERSION} && cmake -G"Unix Makefiles" && make deb \
-    && dpkg -i ./libjpeg*.deb && apt-get -f install \
-    && apt-get -y purge cmake nasm\
-    && apt-get clean \
-    && apt-get -y autoclean \
-    && apt-get -y autoremove \
+    && dpkg -i ./libjpeg*.deb && apt -f install \
+    && apt -y purge cmake nasm\
+    && apt clean \
+    && apt -y autoclean \
+    && apt -y autoremove \
     && rm -rf /var/lib/apt/lists/* \
     && rm -rf /tmp/* \
     && rm -rf /var/tmp/* \
@@ -94,6 +105,7 @@ RUN apt-get install -y cmake nasm \
 RUN rm -rf libjpeg-turbo-${LIBJPEG_VERSION} libjpeg-turbo-${LIBJPEG_VERSION}.tar.gz
 
 RUN mkdir ${CATALINA_HOME}/webapps/geoserver
+# Copy Geoserver version and its plugins from a tmp image to main image
 COPY --from=tmp_image data/geoserver ${CATALINA_HOME}/webapps/geoserver
 COPY --from=tmp_image data/plugins ${CATALINA_HOME}/webapps/geoserver/WEB-INF/lib
 COPY files/geoserver/web.xml ${CATALINA_HOME}/webapps/geoserver/WEB-INF
@@ -110,8 +122,8 @@ ARG OPTIMIZE_LINE_WIDTH=false
 #ARG PROXY_BASE_URL=""
 ## Disable the GeoServer web administration interface | https://docs.geoserver.org/latest/en/user/production/config.html#disable-the-geoserver-web-administration-interface
 #ARG DISABLE_WEB_INTERFACE=false
-## CSRF Protection | https://docs.geoserver.org/stable/en/user/security/webadmin/csrf.html#csrf-protection
-#ARG CSRF_WHITELIST="*"
+# CSRF Protection | https://docs.geoserver.org/stable/en/user/security/webadmin/csrf.html#csrf-protection
+ARG CSRF_WHITELIST="*"
 
 ENV ENABLE_JSONP=${ENABLE_JSONP} \
     MAX_FILTER_RULES=${MAX_FILTER_RULES} \
@@ -122,6 +134,7 @@ ENV GS_OPTIONS=" \
   -DENABLE_JSONP=${ENABLE_JSONP} \
   -DMAX_FILTER_RULES=${MAX_FILTER_RULES} \
   -DOPTIMIZE_LINE_WIDTH=${OPTIMIZE_LINE_WIDTH} \
+  -DGEOSERVER_CSRF_WHITELIST=${CSRF_WHITELIST} \
   -Duser.timezone=UTC \
   -Dorg.geotools.shapefile.datetime=true"
 #  -DNETCDF_DATA_DIR=${NETCDF_DATA_DIR} \
