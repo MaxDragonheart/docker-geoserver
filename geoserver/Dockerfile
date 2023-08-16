@@ -114,7 +114,7 @@ ENV GEOSERVER_HOME=${CATALINA_HOME}/webapps/geoserver
 
 #ARG GEOSERVER_DATA_DIR=""
 ## Global variables affecting WMS | https://docs.geoserver.org/latest/en/user/services/wms/global.html#wms-global-variables
-ARG ENABLE_JSONP=true
+#ARG ENABLE_JSONP=true
 ARG MAX_FILTER_RULES=20
 ARG OPTIMIZE_LINE_WIDTH=false
 ## Proxy Base URL | https://docs.geoserver.org/latest/en/user/configuration/globalsettings.html#proxy-base-url
@@ -122,24 +122,24 @@ ARG OPTIMIZE_LINE_WIDTH=false
 #ARG PROXY_BASE_URL=""
 ## Disable the GeoServer web administration interface | https://docs.geoserver.org/latest/en/user/production/config.html#disable-the-geoserver-web-administration-interface
 #ARG DISABLE_WEB_INTERFACE=false
-# CSRF Protection | https://docs.geoserver.org/stable/en/user/security/webadmin/csrf.html#csrf-protection
-ARG CSRF_WHITELIST="*"
+## CSRF Protection | https://docs.geoserver.org/stable/en/user/security/webadmin/csrf.html#csrf-protection
+#ARG CSRF_WHITELIST="*"
 
-ENV ENABLE_JSONP=${ENABLE_JSONP} \
-    MAX_FILTER_RULES=${MAX_FILTER_RULES} \
+ENV MAX_FILTER_RULES=${MAX_FILTER_RULES} \
     OPTIMIZE_LINE_WIDTH=${OPTIMIZE_LINE_WIDTH}
+#    ENABLE_JSONP=${ENABLE_JSONP}
 
 ENV GS_OPTIONS=" \
   -XX:PerfDataSamplingInterval=500 -Dorg.geotools.referencing.forceXY=true \
-  -DENABLE_JSONP=${ENABLE_JSONP} \
   -DMAX_FILTER_RULES=${MAX_FILTER_RULES} \
   -DOPTIMIZE_LINE_WIDTH=${OPTIMIZE_LINE_WIDTH} \
-  -DGEOSERVER_CSRF_WHITELIST=${CSRF_WHITELIST} \
   -Duser.timezone=UTC \
   -Dorg.geotools.shapefile.datetime=true"
+#  -DENABLE_JSONP=${ENABLE_JSONP} \
 #  -DNETCDF_DATA_DIR=${NETCDF_DATA_DIR} \
 #  -DGRIB_CACHE_DIR=${GRIB_CACHE_DIR} \
-#  -DALLOW_ENV_PARAMETRIZATION=${PROXY_BASE_URL_PARAMETRIZATION}
+#  -DGEOSERVER_CSRF_WHITELIST=${CSRF_WHITELIST} \
+#  -DGEOSERVER_CSRF_WHITELIST=true \
 
 ## Container Considerations | https://docs.geoserver.org/stable/en/user/production/container.html#optimize-your-jvm
 ARG GS_INITIAL_MEMORY=1G
