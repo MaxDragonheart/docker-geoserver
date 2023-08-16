@@ -1,14 +1,24 @@
 # syntax=docker/dockerfile:1
 
-# ULGIS as Layer
-FROM maxdragonheart/ulgis:latest as gis-os
+## ULGIS as Layer
+#FROM maxdragonheart/ulgis:latest as gis-os
+FROM ubuntu:20.04 as base-os
 RUN apt update -y && apt upgrade -y && apt -y autoremove
+
+FROM base-os as gis-os
+# Install useful packages
+RUN apt install -y \
+    nano \
+    unzip \
+    wget \
+    curl \
+    aptitude
 
 WORKDIR /
 # Disable Prompt During Packages Installation
 ARG DEBIAN_FRONTEND=noninteractive
 # Install JAVA and related stuffs
-RUN apt install -y  default-jdk
+RUN apt install -y  openjdk-11-jdk
 # Install GDAL stuffs
 RUN apt install -y  \
     libgdal-dev \
@@ -51,11 +61,9 @@ COPY files/tomcat/tomcat-users.xml ${CATALINA_HOME}/conf
 COPY files/tomcat/web.xml ${CATALINA_HOME}/conf
 
 # Image useful for stuffs collection
-FROM ubuntu:latest as tmp_image
+FROM base-os as tmp_image
 ## Disable Prompt During Packages Installation
 ARG DEBIAN_FRONTEND=noninteractive
-## Update&Upgrade Ubuntu
-RUN apt update && apt upgrade -y
 ## Install useful stuffs
 RUN apt install -y unzip wget
 
@@ -97,6 +105,7 @@ RUN apt install -y cmake nasm \
 RUN rm -rf libjpeg-turbo-${LIBJPEG_VERSION} libjpeg-turbo-${LIBJPEG_VERSION}.tar.gz
 
 RUN mkdir ${CATALINA_HOME}/webapps/geoserver
+# Copy Geoserver version and its plugins from a tmp image to main image
 COPY --from=tmp_image data/geoserver ${CATALINA_HOME}/webapps/geoserver
 COPY --from=tmp_image data/plugins ${CATALINA_HOME}/webapps/geoserver/WEB-INF/lib
 COPY files/geoserver/web.xml ${CATALINA_HOME}/webapps/geoserver/WEB-INF

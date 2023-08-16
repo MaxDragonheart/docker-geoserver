@@ -15,6 +15,7 @@ services:
         TOMCAT_MAJOR: ${TOMCAT_MAJOR}
         TOMCAT_MINOR: ${TOMCAT_MINOR}
         TOMCAT_PATCH: ${TOMCAT_PATCH}
+        CSRF_WHITELIST: ${CSRF_WHITELIST}
     container_name: dev_geoserver
     restart: always
     ports:

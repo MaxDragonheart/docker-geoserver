@@ -15,11 +15,14 @@ services:
         TOMCAT_MAJOR: ${TOMCAT_MAJOR}
         TOMCAT_MINOR: ${TOMCAT_MINOR}
         TOMCAT_PATCH: ${TOMCAT_PATCH}
+        CSRF_WHITELIST: ${CSRF_WHITELIST}
     container_name: dev_geoserver
     restart: always
     volumes:
     - tomcat:/opt/tomcat
     - geoserver:/opt/tomcat/webapps/geoserver
+    networks:
+      - geoserver-network
 
   nginx:
     image: dev_geoserver/nginx
@@ -33,11 +36,12 @@ services:
       - certbot-etc:/etc/letsencrypt
       - certbot-var:/var/lib/letsencrypt
     ports:
-#      - ${NGINX_HTTP_PORT}:${NGINX_HTTP_PORT}
       - 80:80
       - 443:443
     depends_on:
       - geoserver
+    networks:
+      - geoserver-network
 
 volumes:
   tomcat:
@@ -46,3 +50,7 @@ volumes:
   nginx-log:
   certbot-etc:
   certbot-var:
+
+networks:
+  geoserver-network:
+    driver: bridge
