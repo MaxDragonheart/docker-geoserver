@@ -1,11 +1,13 @@
 # syntax=docker/dockerfile:1
 
 ## ULGIS as Layer
-#FROM maxdragonheart/ulgis:latest as gis-os
+#FROM maxdragonheart/ulgis:latest as gis-os Switch to this with issue #37
 FROM ubuntu:20.04 as base-os
 RUN apt update -y && apt upgrade -y && apt -y autoremove
 
 FROM base-os as gis-os
+
+### In use till then will solve the issue #37 ###
 # Install useful packages
 RUN apt install -y \
     nano \
@@ -13,6 +15,7 @@ RUN apt install -y \
     wget \
     curl \
     aptitude
+### ###
 
 WORKDIR /
 # Disable Prompt During Packages Installation
