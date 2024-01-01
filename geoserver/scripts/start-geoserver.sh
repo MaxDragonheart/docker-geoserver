@@ -27,4 +27,5 @@ echo " ---> Start Geoserver v. $GS_VERSION on port $GS_HTTP_PORT"
 echo " ---> Start Geoserver v. $GS_VERSION on port $GS_HTTP_PORT"
 echo " ---> Start Geoserver v. $GS_VERSION on port $GS_HTTP_PORT"
 echo " ---> Start Geoserver v. $GS_VERSION on port $GS_HTTP_PORT"
+
 exec /opt/tomcat/bin/catalina.sh run
