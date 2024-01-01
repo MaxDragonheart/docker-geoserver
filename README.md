@@ -39,9 +39,7 @@ TOMCAT_MINOR=0
 TOMCAT_PATCH=67
 ```
 
-Build: `docker-compose -f docker-compose.yml up -d --build`
-
-Build for Compose 1.2: `docker compose -f docker-compose.yml up -d --build`
+Build for Compose: `docker compose -f docker-compose.yml up -d --build`
 
 ### Active PROXY_BASE_URL and GEOSERVER_CSRF_WHITELIST
 Edit `web.xml` using the right PROXY_BASE_URL and GEOSERVER_CSRF_WHITELIST. After the edit use `docker compose -f docker_compose_file.yml restart`.
