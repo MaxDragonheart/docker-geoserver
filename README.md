@@ -1,6 +1,6 @@
 # Geoserver Docker Image
 
-[Geoserver](https://geoserver.org/) runs on port 8300 as default and it is based on Ubuntu 20.04. The latest version of this image use the latest stable version of Geoserver and Tomcat.
+[Geoserver](https://geoserver.org/) runs on port 8300 as default and it is based on Ubuntu 20.04 [because this error](https://stackoverflow.com/questions/76913667/unable-to-locate-package-libgdal-java) reported on [issue 37](https://github.com/MaxDragonheart/docker-geoserver/issues/37). The latest version of this image use the latest stable version of Geoserver and Tomcat.
 On 01-01-2024:
 
 - Geoserver stable version: [2.24.1](https://geoserver.org/download/)

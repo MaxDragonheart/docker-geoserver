@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 ##### FOR TEST ONLY
-#GS_VERSION=2.21.0
+#GS_VERSION=2.20.4
 #GS_DEMO_DATA=True
 ##### FOR TEST ONLY
 
@@ -31,6 +31,7 @@ echo " ------> $PWD/downloads/"
 echo " ------> $PWD/$GEOSERVER_WAR"
 rm -rf downloads/
 rm -rf "$GEOSERVER_WAR"
+rm -rf data/geoserver/.gitignore
 
 if [ "$GS_DEMO_DATA" = False ];
 then
