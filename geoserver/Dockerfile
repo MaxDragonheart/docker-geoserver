@@ -2,7 +2,7 @@
 
 ## ULGIS as Layer
 #FROM maxdragonheart/ulgis:latest as gis-os Switch to this with issue #37
-FROM ubuntu:20.04 as base-os
+FROM ubuntu:22.04 as base-os
 RUN apt update -y && apt upgrade -y && apt -y autoremove
 
 FROM base-os as gis-os
@@ -14,8 +14,9 @@ RUN apt install -y \
     unzip \
     wget \
     curl \
-    aptitude
-### ###
+    aptitude \
+    openssl \
+    gettext
 
 WORKDIR /
 # Disable Prompt During Packages Installation
@@ -24,8 +25,7 @@ ARG DEBIAN_FRONTEND=noninteractive
 RUN apt install -y  openjdk-11-jdk
 # Install GDAL stuffs
 RUN apt install -y  \
-    libgdal-dev \
-    libgdal-java
+    gdal-bin
 # Install useful stuffs
 RUN apt install -y \
     systemctl  \
