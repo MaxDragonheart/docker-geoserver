@@ -38,7 +38,7 @@ FROM gis-os as tomcat
 ## Environment Variables
 ARG TOMCAT_MAJOR=9
 ARG TOMCAT_MINOR=0
-ARG TOMCAT_PATCH=79
+ARG TOMCAT_PATCH=84
 ARG TOMCAT_VERSION=${TOMCAT_MAJOR}.${TOMCAT_MINOR}.${TOMCAT_PATCH}
 ARG CATALINA_HOME=/opt/tomcat
 ARG GS_HTTP_PORT=8300
@@ -70,7 +70,7 @@ ARG DEBIAN_FRONTEND=noninteractive
 ## Install useful stuffs
 RUN apt install -y unzip wget
 
-ARG GS_VERSION=2.23.4
+ARG GS_VERSION=2.24.1
 ARG GS_DEMO_DATA=False
 
 ENV GS_VERSION=${GS_VERSION} \
@@ -90,22 +90,23 @@ RUN ./download-extensions.sh
 
 # Tomcat as Layer
 FROM tomcat as geoserver
-ENV LIBJPEG_VERSION=2.0.6
-RUN apt install -y cmake nasm \
-    && wget https://nav.dl.sourceforge.net/project/libjpeg-turbo/${LIBJPEG_VERSION}/libjpeg-turbo-${LIBJPEG_VERSION}.tar.gz \
-    && tar -zxf ./libjpeg-turbo-${LIBJPEG_VERSION}.tar.gz \
-    && cd libjpeg-turbo-${LIBJPEG_VERSION} && cmake -G"Unix Makefiles" && make deb \
-    && dpkg -i ./libjpeg*.deb && apt -f install \
-    && apt -y purge cmake nasm\
-    && apt clean \
-    && apt -y autoclean \
-    && apt -y autoremove \
-    && rm -rf /var/lib/apt/lists/* \
-    && rm -rf /tmp/* \
-    && rm -rf /var/tmp/* \
-    && rm -rf /usr/share/man/* \
-    && rm -rf /usr/share/doc/*
-RUN rm -rf libjpeg-turbo-${LIBJPEG_VERSION} libjpeg-turbo-${LIBJPEG_VERSION}.tar.gz
+
+#ENV LIBJPEG_VERSION=3.0.1
+#RUN apt install -y cmake nasm \
+#    && wget https://nav.dl.sourceforge.net/project/libjpeg-turbo/${LIBJPEG_VERSION}/libjpeg-turbo-${LIBJPEG_VERSION}.tar.gz \
+#    && tar -zxf ./libjpeg-turbo-${LIBJPEG_VERSION}.tar.gz \
+#    && cd libjpeg-turbo-${LIBJPEG_VERSION} && cmake -G"Unix Makefiles" && make deb \
+#    && dpkg -i ./libjpeg*.deb && apt -f install \
+#    && apt -y purge cmake nasm\
+#    && apt clean \
+#    && apt -y autoclean \
+#    && apt -y autoremove \
+#    && rm -rf /var/lib/apt/lists/* \
+#    && rm -rf /tmp/* \
+#    && rm -rf /var/tmp/* \
+#    && rm -rf /usr/share/man/* \
+#    && rm -rf /usr/share/doc/*
+#RUN rm -rf libjpeg-turbo-${LIBJPEG_VERSION} libjpeg-turbo-${LIBJPEG_VERSION}.tar.gz
 
 RUN mkdir ${CATALINA_HOME}/webapps/geoserver
 # Copy Geoserver version and its plugins from a tmp image to main image
@@ -167,4 +168,3 @@ WORKDIR ${GEOSERVER_HOME}
 EXPOSE ${GS_HTTP_PORT}
 
 CMD ["/start-geoserver.sh", "run"]
-

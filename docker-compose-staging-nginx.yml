@@ -15,7 +15,7 @@ services:
         TOMCAT_MAJOR: ${TOMCAT_MAJOR}
         TOMCAT_MINOR: ${TOMCAT_MINOR}
         TOMCAT_PATCH: ${TOMCAT_PATCH}
-    container_name: dev_geoserver
+    container_name: staging_geoserver
     restart: always
     volumes:
     - tomcat:/opt/tomcat

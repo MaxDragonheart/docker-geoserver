@@ -1,6 +1,12 @@
 # Geoserver Docker Image
 
-[Geoserver](https://geoserver.org/) runs on port 8300 as default with minimum 2GB and maximum 4GB  of RAM.
+[Geoserver](https://geoserver.org/) runs on port 8300 as default and it is based on Ubuntu 20.04. The latest version of this image use the latest stable version of Geoserver and Tomcat.
+On 01-01-2024:
+
+- Geoserver stable version: [2.24.1](https://geoserver.org/download/)
+- Tomcat stable version: [9.0.84](https://dlcdn.apache.org/tomcat/)
+
+Since 01-01-2024 the image's tag system follow the official Geoserver's versions tag.
 
 ## Credentials
 
@@ -18,7 +24,6 @@ Password: `geoserver`
 - [Vector Tiles](https://docs.geoserver.org/latest/en/user/extensions/vectortiles/index.html)
 - [Web Coverage Service 2.0 Earth Observation extensions](https://docs.geoserver.org/latest/en/user/extensions/wcs20eo/index.html)
 - [WMTS Multidimensional](https://docs.geoserver.org/latest/en/user/extensions/wmts-multidimensional/install.html)
-- [INSPIRE](https://docs.geoserver.org/stable/en/user/extensions/inspire/index.html)
 
 ## Run project
 Use `.env` to customize your version:
