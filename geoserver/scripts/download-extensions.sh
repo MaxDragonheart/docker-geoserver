@@ -24,6 +24,7 @@ echo " ---> Extention to download: $ARRAY_LEN"
 
 mkdir downloads/
 
+echo " ---> Start download extensions"
 for url in "${EXTENSIONS_LINK_LIST[@]}";
 do
   echo " ---> Start download of $url"
