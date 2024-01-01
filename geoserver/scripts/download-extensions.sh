@@ -16,7 +16,7 @@ EXTENSIONS_LINK_LIST=(
   "http://sourceforge.net/projects/geoserver/files/GeoServer/${GS_VERSION}/extensions/geoserver-${GS_VERSION}-vectortiles-plugin.zip"
   "http://sourceforge.net/projects/geoserver/files/GeoServer/${GS_VERSION}/extensions/geoserver-${GS_VERSION}-wcs2_0-eo-plugin.zip"
   "http://sourceforge.net/projects/geoserver/files/GeoServer/${GS_VERSION}/extensions/geoserver-${GS_VERSION}-wmts-multi-dimensional-plugin.zip"
-  "http://sourceforge.net/projects/geoserver/files/GeoServer/${GS_VERSION}/extensions/geoserver-${GS_VERSION}-inspire-plugin.zip"
+  # "http://sourceforge.net/projects/geoserver/files/GeoServer/${GS_VERSION}/extensions/geoserver-${GS_VERSION}-inspire-plugin.zip"
   )
 ARRAY_LEN=${#EXTENSIONS_LINK_LIST[@]}
 
@@ -24,6 +24,7 @@ echo " ---> Extention to download: $ARRAY_LEN"
 
 mkdir downloads/
 
+echo " ---> Start download extensions"
 for url in "${EXTENSIONS_LINK_LIST[@]}";
 do
   echo " ---> Start download of $url"
