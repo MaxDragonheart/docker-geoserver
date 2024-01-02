@@ -1,12 +1,15 @@
 # syntax=docker/dockerfile:1
 
 FROM tomcat:9.0.84-jdk11-corretto-al2 as tomcat
+ARG GS_HTTP_PORT=8080
+
 ENV CATALINA_BASE=/usr/local/tomcat \
     CATALINA_HOME=/usr/local/tomcat \
     CATALINA_TMPDIR=/usr/local/tomcat/temp \
     JRE_HOME=/usr \
     CLASSPATH=/usr/local/tomcat/bin/bootstrap.jar:/usr/local/tomcat/bin/tomcat-juli.jar \
-    CATALINA_CONF=/usr/local/tomcat/conf/
+    CATALINA_CONF=/usr/local/tomcat/conf/ \
+    GS_HTTP_PORT=${GS_HTTP_PORT}
 
 # Install useful packages
 RUN yum install -y \
