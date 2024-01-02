@@ -9,17 +9,13 @@ services:
       args:
         GS_VERSION: ${GS_VERSION}
         GS_DEMO_DATA: ${GS_DEMO_DATA}
-        GS_HTTP_PORT: ${GS_HTTP_PORT}
         GS_INITIAL_MEMORY: ${GS_INITIAL_MEMORY}
         GS_MAXIMUM_MEMORY: ${GS_MAXIMUM_MEMORY}
-        TOMCAT_MAJOR: ${TOMCAT_MAJOR}
-        TOMCAT_MINOR: ${TOMCAT_MINOR}
-        TOMCAT_PATCH: ${TOMCAT_PATCH}
     container_name: geoserver
     restart: always
     volumes:
-    - tomcat:/opt/tomcat
-    - geoserver:/opt/tomcat/webapps/geoserver
+    - tomcat:/usr/local/tomcat
+    - geoserver:/usr/local/tomcat/webapps/geoserver
 
   nginx:
     image: maxdragonheart/nginx
