@@ -32,7 +32,7 @@ COPY files/tomcat/web.xml ${CATALINA_HOME}/conf
 ## Image useful for stuffs collection
 FROM maxdragonheart/ulgis:latest as tmp_image
 ARG GS_VERSION=2.22.4
-ARG GS_DEMO_DATA=False
+ARG GS_DEMO_DATA=True
 
 ENV GS_VERSION=${GS_VERSION} \
     GS_DEMO_DATA=${GS_DEMO_DATA}
@@ -45,6 +45,10 @@ RUN ./download-geoserver.sh
 COPY scripts/download-extensions.sh ./download-extensions.sh
 RUN chmod +x download-extensions.sh
 RUN ./download-extensions.sh
+## Remove demo data
+COPY scripts/demo-data.sh ./demo-data.sh
+RUN chmod +x demo-data.sh
+RUN ./demo-data.sh
 
 
 ## Tomcat as Layer
