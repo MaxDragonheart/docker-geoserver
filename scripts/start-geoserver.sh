@@ -28,4 +28,4 @@ echo " ---> Start Geoserver v. $GS_VERSION on port $GS_HTTP_PORT"
 echo " ---> Start Geoserver v. $GS_VERSION on port $GS_HTTP_PORT"
 echo " ---> Start Geoserver v. $GS_VERSION on port $GS_HTTP_PORT"
 
-exec ./bin/catalina.sh run
+exec $CATALINA_HOME/bin/catalina.sh run
