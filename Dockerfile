@@ -32,10 +32,8 @@ COPY files/tomcat/web.xml ${CATALINA_HOME}/conf
 ## Image useful for stuffs collection
 FROM maxdragonheart/ulgis:latest as tmp_image
 ARG GS_VERSION=2.22.4
-ARG GS_DEMO_DATA=True
 
-ENV GS_VERSION=${GS_VERSION} \
-    GS_DEMO_DATA=${GS_DEMO_DATA}
+ENV GS_VERSION=${GS_VERSION}
 
 ## Download Geoserver
 COPY scripts/download-geoserver.sh ./download-geoserver.sh
@@ -45,10 +43,6 @@ RUN ./download-geoserver.sh
 COPY scripts/download-extensions.sh ./download-extensions.sh
 RUN chmod +x download-extensions.sh
 RUN ./download-extensions.sh
-## Remove demo data
-COPY scripts/demo-data.sh ./demo-data.sh
-RUN chmod +x demo-data.sh
-RUN ./demo-data.sh
 
 
 ## Tomcat as Layer
@@ -59,6 +53,13 @@ COPY --from=tmp_image app/geoserver ${CATALINA_HOME}/webapps/geoserver
 COPY files/geoserver/web.xml ${CATALINA_HOME}/webapps/geoserver/WEB-INF
 
 ENV GEOSERVER_HOME=${CATALINA_HOME}/webapps/geoserver
+
+## Remove demo data
+ARG GS_DEMO_DATA=True
+ENV GS_DEMO_DATA=${GS_DEMO_DATA}
+COPY scripts/demo-data.sh ./demo-data.sh
+RUN chmod +x demo-data.sh
+RUN ./demo-data.sh
 
 ## Global variables affecting WMS | https://docs.geoserver.org/latest/en/user/services/wms/global.html#wms-global-variables
 ARG ENABLE_JSONP=true

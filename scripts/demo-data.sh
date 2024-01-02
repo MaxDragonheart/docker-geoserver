@@ -1,20 +1,22 @@
 #!/usr/bin/env bash
 echo " ---> Remove demo data"
 
+#GEOSERVER_HOME=/usr/local/tomcat/webapps/geoserver
+
 if [ "$GS_DEMO_DATA" = False ];
 then
 
-  rm -rf ./geoserver/data/data/
-  rm -rf ./geoserver/data/layergroups/
-  rm -rf ./geoserver/data/palettes/
-  rm -rf ./geoserver/data/styles/
-  rm -rf ./geoserver/data/workspaces/
+  rm -rf $GEOSERVER_HOME/data/data/
+  rm -rf $GEOSERVER_HOME/data/layergroups/
+  rm -rf $GEOSERVER_HOME/data/palettes/
+  rm -rf $GEOSERVER_HOME/data/styles/
+  rm -rf $GEOSERVER_HOME/data/workspaces/
 
-  mkdir ./geoserver/data/data/
-  mkdir ./geoserver/data/layergroups/
-  mkdir ./geoserver/data/palettes/
-  mkdir ./geoserver/data/styles/
-  mkdir ./geoserver/data/workspaces/
+  mkdir $GEOSERVER_HOME/data/data/
+  mkdir $GEOSERVER_HOME/data/layergroups/
+  mkdir $GEOSERVER_HOME/data/palettes/
+  mkdir $GEOSERVER_HOME/data/styles/
+  mkdir $GEOSERVER_HOME/data/workspaces/
 fi
 
 echo " ---> Remove demo data completed"
