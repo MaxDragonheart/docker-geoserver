@@ -1,11 +1,10 @@
 # Geoserver Docker Image
 
-Geoserver runs on port 8080 as default and it is based on Ubuntu 20.04 [because this error](https://stackoverflow.com/questions/76913667/unable-to-locate-package-libgdal-java) reported on [issue 37](https://github.com/MaxDragonheart/docker-geoserver/issues/37). The latest version of this image use the latest stable version of ~~Geoserver~~[issue 41](https://github.com/MaxDragonheart/docker-geoserver/issues/41) and Tomcat.
+Geoserver runs on port 8080 as default and it is based on [Tomcat Docker](https://hub.docker.com/_/tomcat/tags). ~~The latest version of this image use the latest stable version of Geoserver~~[issue 41](https://github.com/MaxDragonheart/docker-geoserver/issues/41).
 
 On 01-01-2024:
 
 - Geoserver stable version: [2.24.1](https://geoserver.org/download/)
-- Tomcat stable version: [9.0.84](https://dlcdn.apache.org/tomcat/)
 
 Since 01-01-2024 the image's tag system follow the official Geoserver's versions tag.
 
@@ -31,12 +30,8 @@ Use `.env` to customize your version:
 ```
 GS_VERSION=2.20.4
 GS_DEMO_DATA=False
-GS_HTTP_PORT=8300
 GS_INITIAL_MEMORY=1G
 GS_MAXIMUM_MEMORY=4G
-TOMCAT_MAJOR=9
-TOMCAT_MINOR=0
-TOMCAT_PATCH=67
 ```
 
 Build for Compose: `docker compose -f docker-compose.yml up -d --build`
