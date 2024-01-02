@@ -31,7 +31,7 @@ COPY files/tomcat/web.xml ${CATALINA_HOME}/conf
 
 ## Image useful for stuffs collection
 FROM maxdragonheart/ulgis:latest as tmp_image
-ARG GS_VERSION=2.22.4
+ARG GS_VERSION=2.20.4
 
 ENV GS_VERSION=${GS_VERSION}
 
@@ -80,7 +80,6 @@ ENV GS_INITIAL_MEMORY=${GS_INITIAL_MEMORY} \
 COPY ./scripts/start-geoserver.sh ./
 RUN chmod +x start-geoserver.sh
 
-#WORKDIR ${GEOSERVER_HOME}
 EXPOSE ${GS_HTTP_PORT}
 
 CMD ["./start-geoserver.sh", "run"]
