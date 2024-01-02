@@ -1,10 +1,13 @@
 #!/usr/bin/env bash
 
 ##### FOR TEST ONLY
-#GS_VERSION=2.21.0
+#GS_VERSION=2.20.4
 ##### FOR TEST ONLY
 
 echo " ---> Extensions for Geoserver's version: $GS_VERSION"
+
+GEOSERVER_PLUGINS=./plugins
+DOWNLOAD_FOLDER=./downloads
 
 declare -a EXTENSIONS_LINK_LIST
 EXTENSIONS_LINK_LIST=(
@@ -22,13 +25,13 @@ ARRAY_LEN=${#EXTENSIONS_LINK_LIST[@]}
 
 echo " ---> Extention to download: $ARRAY_LEN"
 
-mkdir downloads/
+mkdir ${DOWNLOAD_FOLDER}/
 
 echo " ---> Start download extensions"
 for url in "${EXTENSIONS_LINK_LIST[@]}";
 do
-  echo " ---> Start download of $url"
-  wget "$url" -P downloads/;
+  echo " ------> Start download of $url"
+  wget "$url" -P ${DOWNLOAD_FOLDER}/;
 done
 
 #echo " ---> Start download extensions"
@@ -36,12 +39,15 @@ done
 #wget -i data/extensions.txt -P downloads/
 #rm data/extensions.txt
 
-echo " ---> Unzip downloaded extensions from downloads/ to data/plugins"
-for zipfiles in /downloads/*.zip;
+echo " ---> Unzip downloaded extensions from ${DOWNLOAD_FOLDER} to ${GEOSERVER_PLUGINS}"
+for zipfiles in ${DOWNLOAD_FOLDER}/*.zip;
 do
-  unzip "$zipfiles" '*.jar' -d data/plugins;
+  echo " ------> Unzip ${zipfiles}"
+  unzip "$zipfiles" '*.jar' -d "${GEOSERVER_PLUGINS}";
 done
 
-rm -rf downloads/
+cp ${GEOSERVER_PLUGINS}/* ./geoserver/WEB-INF/lib
+
+rm -rf ${DOWNLOAD_FOLDER}/ ${GEOSERVER_PLUGINS}/
 
 echo " ---> Extensions download completed"
