@@ -7,9 +7,10 @@
 
 GEOSERVER_LINK="http://sourceforge.net/projects/geoserver/files/GeoServer/${GS_VERSION}/geoserver-${GS_VERSION}-war.zip"
 GEOSERVER_WAR=geoserver.war
+DOWNLOAD_FOLDER=./downloads
 GEOSERVER_FOLDER=./geoserver
 
-echo " ---> Start download of Geoserver $GS_VERSION"
+echo " ---> Start Geoserver $GS_VERSION download"
 pwd
 echo " ---> Download Geoserver in $PWD/downloads/"
 mkdir downloads/
