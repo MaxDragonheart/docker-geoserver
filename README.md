@@ -1,6 +1,6 @@
 # Geoserver Docker Image
 
-Geoserver runs on port 8080 as default and it is based on [Tomcat Docker](https://hub.docker.com/_/tomcat/tags). ~~The latest version of this image use the latest stable version of Geoserver~~[issue 41](https://github.com/MaxDragonheart/docker-geoserver/issues/41).
+Geoserver runs on port 8080 as default and it is based on Tomcat 9.0.84. ~~The latest version of this image use the latest stable version of Geoserver~~[issue 41](https://github.com/MaxDragonheart/docker-geoserver/issues/41).
 
 On 01-01-2024:
 
