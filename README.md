@@ -25,6 +25,7 @@ Password: `geoserver`
 - [Web Coverage Service 2.0 Earth Observation extensions](https://docs.geoserver.org/latest/en/user/extensions/wcs20eo/index.html)
 - [WMTS Multidimensional](https://docs.geoserver.org/latest/en/user/extensions/wmts-multidimensional/install.html)
 - [libjpeg-turbo Map Encoder Extension](https://docs.geoserver.org/latest/en/user/extensions/libjpeg-turbo/index.html)
+- [INSPIRE](https://docs.geoserver.org/latest/en/user/extensions/inspire/index.html)
 
 ## Run project
 Use `.env` to customize your version:
