@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 ##### FOR TEST ONLY
-#GS_VERSION=2.20.4
+#GS_VERSION=2.20
 ##### FOR TEST ONLY
 
 echo " ---> Extensions for Geoserver's version: $GS_VERSION"
@@ -11,14 +11,15 @@ DOWNLOAD_FOLDER=./downloads
 
 declare -a EXTENSIONS_LINK_LIST
 EXTENSIONS_LINK_LIST=(
-  "http://sourceforge.net/projects/geoserver/files/GeoServer/${GS_VERSION}/extensions/geoserver-${GS_VERSION}-gdal-plugin.zip"
-  "http://sourceforge.net/projects/geoserver/files/GeoServer/${GS_VERSION}/extensions/geoserver-${GS_VERSION}-jp2k-plugin.zip"
-  "http://sourceforge.net/projects/geoserver/files/GeoServer/${GS_VERSION}/extensions/geoserver-${GS_VERSION}-monitor-plugin.zip"
-  "http://sourceforge.net/projects/geoserver/files/GeoServer/${GS_VERSION}/extensions/geoserver-${GS_VERSION}-importer-plugin.zip"
-  "http://sourceforge.net/projects/geoserver/files/GeoServer/${GS_VERSION}/extensions/geoserver-${GS_VERSION}-querylayer-plugin.zip"
-  "http://sourceforge.net/projects/geoserver/files/GeoServer/${GS_VERSION}/extensions/geoserver-${GS_VERSION}-vectortiles-plugin.zip"
-  "http://sourceforge.net/projects/geoserver/files/GeoServer/${GS_VERSION}/extensions/geoserver-${GS_VERSION}-wcs2_0-eo-plugin.zip"
-  "http://sourceforge.net/projects/geoserver/files/GeoServer/${GS_VERSION}/extensions/geoserver-${GS_VERSION}-wmts-multi-dimensional-plugin.zip"
+  # "http://sourceforge.net/projects/geoserver/files/GeoServer/${GS_VERSION}/extensions/geoserver-${GS_VERSION}-gdal-plugin.zip"
+  "https://build.geoserver.org/geoserver/${GS_VERSION}.x/ext-latest/geoserver-${GS_VERSION}-SNAPSHOT-gdal-plugin.zip"
+  # "http://sourceforge.net/projects/geoserver/files/GeoServer/${GS_VERSION}/extensions/geoserver-${GS_VERSION}-jp2k-plugin.zip"
+  # "http://sourceforge.net/projects/geoserver/files/GeoServer/${GS_VERSION}/extensions/geoserver-${GS_VERSION}-monitor-plugin.zip"
+  # "http://sourceforge.net/projects/geoserver/files/GeoServer/${GS_VERSION}/extensions/geoserver-${GS_VERSION}-importer-plugin.zip"
+  # "http://sourceforge.net/projects/geoserver/files/GeoServer/${GS_VERSION}/extensions/geoserver-${GS_VERSION}-querylayer-plugin.zip"
+  # "http://sourceforge.net/projects/geoserver/files/GeoServer/${GS_VERSION}/extensions/geoserver-${GS_VERSION}-vectortiles-plugin.zip"
+  # "http://sourceforge.net/projects/geoserver/files/GeoServer/${GS_VERSION}/extensions/geoserver-${GS_VERSION}-wcs2_0-eo-plugin.zip"
+  # "http://sourceforge.net/projects/geoserver/files/GeoServer/${GS_VERSION}/extensions/geoserver-${GS_VERSION}-wmts-multi-dimensional-plugin.zip"
   # "http://sourceforge.net/projects/geoserver/files/GeoServer/${GS_VERSION}/extensions/geoserver-${GS_VERSION}-inspire-plugin.zip"
   )
 ARRAY_LEN=${#EXTENSIONS_LINK_LIST[@]}
@@ -46,8 +47,8 @@ do
   unzip "$zipfiles" '*.jar' -d "${GEOSERVER_PLUGINS}";
 done
 
-cp ${GEOSERVER_PLUGINS}/* ./geoserver/WEB-INF/lib
+# cp ${GEOSERVER_PLUGINS}/* ./geoserver/WEB-INF/lib
 
-rm -rf ${DOWNLOAD_FOLDER}/ ${GEOSERVER_PLUGINS}/
+rm -rf ${DOWNLOAD_FOLDER}/  # ${GEOSERVER_PLUGINS}/
 
 echo " ---> Extensions download completed"
