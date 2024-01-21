@@ -1,8 +1,7 @@
 #!/usr/bin/env bash
 
 ##### FOR TEST ONLY
-#GS_VERSION=2.20
-#GS_DEMO_DATA=True
+#GS_VERSION=2.20.1
 ##### FOR TEST ONLY
 
 GEOSERVER_FILENAME=geoserver-$GS_VERSION-war.zip
@@ -14,24 +13,21 @@ GEOSERVER_FOLDER=./geoserver
 echo " ---> Start Geoserver $GS_VERSION download"
 pwd
 echo " ---> Download Geoserver in $PWD/downloads/"
-mkdir downloads/
+mkdir $DOWNLOAD_FOLDER
 echo " ---> Geoserver download link: $GEOSERVER_LINK"
 wget "$GEOSERVER_LINK" -P downloads/
 
 echo " ---> Unzip and copy Geoserver"
-echo " ------> from $PWD/downloads/$GEOSERVER_FILENAME"
+echo " ------> from $PWD/$DOWNLOAD_FOLDER/$GEOSERVER_FILENAME"
 echo " ------> to $PWD/data/"
-unzip downloads/"$GEOSERVER_FILENAME" '*.war' -d ./
+unzip $DOWNLOAD_FOLDER/$GEOSERVER_FILENAME '*.war' -d ./
 
 echo " ---> Unzip .war"
 echo " ------> from $PWD/$GEOSERVER_WAR"
 echo " ------> to $PWD/$GEOSERVER_FOLDER"
 unzip "$GEOSERVER_WAR" -d "$GEOSERVER_FOLDER"
 
-echo " ---> Deletion of:"
-echo " ------> $PWD/downloads/"
-echo " ------> $PWD/$GEOSERVER_WAR"
-rm -rf downloads/
+rm -rf $DOWNLOAD_FOLDER
 rm -rf "$GEOSERVER_WAR"
 rm -rf./geoserver/.gitignore
 

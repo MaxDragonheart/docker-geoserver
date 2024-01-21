@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 ##### FOR TEST ONLY
-#GS_VERSION=2.20
+#GS_VERSION=2.20.1
 ##### FOR TEST ONLY
 
 echo " ---> Extensions for Geoserver's version: $GS_VERSION"
@@ -20,6 +20,7 @@ EXTENSIONS_LINK_LIST=(
    "http://sourceforge.net/projects/geoserver/files/GeoServer/${GS_VERSION}/extensions/geoserver-${GS_VERSION}-wcs2_0-eo-plugin.zip"
    "http://sourceforge.net/projects/geoserver/files/GeoServer/${GS_VERSION}/extensions/geoserver-${GS_VERSION}-wmts-multi-dimensional-plugin.zip"
    "http://sourceforge.net/projects/geoserver/files/GeoServer/${GS_VERSION}/extensions/geoserver-${GS_VERSION}-inspire-plugin.zip"
+   "http://sourceforge.net/projects/geoserver/files/GeoServer/${GS_VERSION}/extensions/geoserver-${GS_VERSION}-libjpeg-turbo-plugin.zip"
   )
 ARRAY_LEN=${#EXTENSIONS_LINK_LIST[@]}
 
@@ -34,11 +35,6 @@ do
   wget "$url" -P ${DOWNLOAD_FOLDER}/;
 done
 
-#echo " ---> Start download extensions"
-#echo " ---> Put extensions list from data/extensions.txt in downloads/"
-#wget -i data/extensions.txt -P downloads/
-#rm data/extensions.txt
-
 echo " ---> Unzip downloaded extensions from ${DOWNLOAD_FOLDER} to ${GEOSERVER_PLUGINS}"
 for zipfiles in ${DOWNLOAD_FOLDER}/*.zip;
 do
@@ -46,8 +42,6 @@ do
   unzip "$zipfiles" '*.jar' -d "${GEOSERVER_PLUGINS}";
 done
 
-# cp ${GEOSERVER_PLUGINS}/* ./geoserver/WEB-INF/lib
-
-rm -rf ${DOWNLOAD_FOLDER}/  # ${GEOSERVER_PLUGINS}/
+rm -rf ${DOWNLOAD_FOLDER}/
 
 echo " ---> Extensions download completed"
