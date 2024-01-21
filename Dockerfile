@@ -27,14 +27,12 @@ RUN chmod +x download-extensions.sh
 RUN ./download-extensions.sh
 
 FROM tomcat AS geoserver
-ARG GS_HTTP_PORT=8080
 
 # Install GDAL stuffs
 RUN apt-get install -y \
     gdal-bin
 
-ENV GEOSERVER_HOME=$CATALINA_HOME/webapps/geoserver \
-    GS_HTTP_PORT=$GS_HTTP_PORT
+ENV GEOSERVER_HOME=$CATALINA_HOME/webapps/geoserver
 
 COPY --from=tmp_image_geoserver $CATALINA_HOME/geoserver $GEOSERVER_HOME
 COPY --from=tmp_image_geoserver $CATALINA_HOME/plugins $GEOSERVER_HOME/WEB-INF/lib
@@ -42,6 +40,8 @@ COPY --from=tmp_image_geoserver $CATALINA_HOME/plugins $GEOSERVER_HOME/WEB-INF/l
 WORKDIR $GEOSERVER_HOME
 
 FROM geoserver AS geoserver-production
+ARG GS_HTTP_PORT=8080
+ENV GS_HTTP_PORT=$GS_HTTP_PORT
 
 #COPY files/tomcat/context.xml $CATALINA_HOME/webapps/manager/META-INF
 COPY files/tomcat/tomcat-users.xml $CATALINA_HOME/conf
