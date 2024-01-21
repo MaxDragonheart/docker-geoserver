@@ -15,7 +15,7 @@ RUN apt-get install -y \
     unzip
 
 FROM tomcat AS tmp_image_geoserver
-ARG GS_VERSION=2.24
+ARG GS_VERSION=2.24.1
 
 ## Download Geoserver
 COPY scripts/download-geoserver.sh ./download-geoserver.sh
@@ -26,9 +26,53 @@ COPY scripts/download-extensions.sh ./download-extensions.sh
 RUN chmod +x download-extensions.sh
 RUN ./download-extensions.sh
 
-#FROM tomcat as geoserver
-#COPY --from=tmp_image_geoserver $CATALINA_HOME/geoserver $CATALINA_HOME/webapps/geoserver
+FROM tomcat as geoserver
+ARG GS_HTTP_PORT=8080
 
+# Install GDAL stuffs
+RUN apt-get install -y \
+    gdal-bin \
+    libgdal-dev \
+    libgdal-java
+
+ENV GEOSERVER_HOME=$CATALINA_HOME/webapps/geoserver \
+    GS_HTTP_PORT=${GS_HTTP_PORT}
+
+COPY --from=tmp_image_geoserver $CATALINA_HOME/geoserver $GEOSERVER_HOME
+COPY --from=tmp_image_geoserver $CATALINA_HOME/plugins $GEOSERVER_HOME/WEB-INF/lib
+
+WORKDIR $GEOSERVER_HOME
+
+## Global variables affecting WMS | https://docs.geoserver.org/latest/en/user/services/wms/global.html#wms-global-variables
+ARG ENABLE_JSONP=true
+ARG MAX_FILTER_RULES=20
+ARG OPTIMIZE_LINE_WIDTH=false
+
+ENV MAX_FILTER_RULES=${MAX_FILTER_RULES} \
+    OPTIMIZE_LINE_WIDTH=${OPTIMIZE_LINE_WIDTH} \
+    ENABLE_JSONP=${ENABLE_JSONP}
+
+## Container Considerations | https://docs.geoserver.org/stable/en/user/production/container.html#optimize-your-jvm
+ARG GS_INITIAL_MEMORY=1G
+ARG GS_MAXIMUM_MEMORY=4G
+
+ENV GS_INITIAL_MEMORY=${GS_INITIAL_MEMORY} \
+    GS_MAXIMUM_MEMORY=${GS_MAXIMUM_MEMORY}
+
+COPY ./scripts/start-geoserver.sh ./
+RUN chmod +x start-geoserver.sh
+
+EXPOSE ${GS_HTTP_PORT}
+
+## Remove demo data
+ARG GS_DEMO_DATA=True
+ENV GS_DEMO_DATA=${GS_DEMO_DATA}
+COPY scripts/demo-data.sh ./
+RUN chmod +x demo-data.sh
+RUN ./demo-data.sh
+
+#ENTRYPOINT ["/bin/bash"]
+CMD ["./start-geoserver.sh", "run"]
 
 #FROM tomcat AS geoserver
 #
@@ -49,6 +93,6 @@ RUN ./download-extensions.sh
 #RUN mv $CATALINA_TMPDIR/geoserver $CATALINA_HOME/webapps
 #RUN rm -rf $CATALINA_TMPDIR/geoserver
 
-ENTRYPOINT ["/bin/bash"]
 
-EXPOSE 8080
+#
+#EXPOSE 8080
