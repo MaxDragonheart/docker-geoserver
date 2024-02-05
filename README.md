@@ -1,6 +1,6 @@
 # Geoserver Docker Image
 
-Geoserver runs on port 8080 as default and it is based on Tomcat 9.0.84. ~~The latest version of this image use the latest stable version of Geoserver~~[issue 41](https://github.com/MaxDragonheart/docker-geoserver/issues/41).
+The latest version of this image use the latest stable version of Geoserver
 
 On 01-01-2024:
 
@@ -24,6 +24,8 @@ Password: `geoserver`
 - [Vector Tiles](https://docs.geoserver.org/latest/en/user/extensions/vectortiles/index.html)
 - [Web Coverage Service 2.0 Earth Observation extensions](https://docs.geoserver.org/latest/en/user/extensions/wcs20eo/index.html)
 - [WMTS Multidimensional](https://docs.geoserver.org/latest/en/user/extensions/wmts-multidimensional/install.html)
+- [libjpeg-turbo Map Encoder Extension](https://docs.geoserver.org/latest/en/user/extensions/libjpeg-turbo/index.html)
+- [INSPIRE](https://docs.geoserver.org/latest/en/user/extensions/inspire/index.html)
 
 ## Run project
 Use `.env` to customize your version:
@@ -32,6 +34,7 @@ GS_VERSION=2.20.4
 GS_DEMO_DATA=False
 GS_INITIAL_MEMORY=1G
 GS_MAXIMUM_MEMORY=4G
+GS_HTTP_PORT=8600
 ```
 
 Build for Compose: `docker compose -f docker-compose.yml up -d --build`
