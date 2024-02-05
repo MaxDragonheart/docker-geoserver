@@ -30,7 +30,9 @@ FROM tomcat AS geoserver
 
 # Install GDAL stuffs
 RUN apt-get install -y \
-    gdal-bin
+    gdal-bin \
+    libgdal-java \
+    libgdal-dev
 
 ENV GEOSERVER_HOME=$CATALINA_HOME/webapps/geoserver
 
@@ -46,7 +48,7 @@ ENV GS_HTTP_PORT=$GS_HTTP_PORT
 #COPY files/tomcat/context.xml $CATALINA_HOME/webapps/manager/META-INF
 COPY files/tomcat/tomcat-users.xml $CATALINA_HOME/conf
 COPY files/tomcat/web.xml $CATALINA_HOME/conf
-#COPY files/geoserver/web.xml ${CATALINA_HOME}/webapps/geoserver/WEB-INF
+#COPY files/geoserver/web.xml $CATALINA_HOME/webapps/geoserver/WEB-INF
 
 ## Global variables affecting WMS | https://docs.geoserver.org/latest/en/user/services/wms/global.html#wms-global-variables
 ARG ENABLE_JSONP=true
