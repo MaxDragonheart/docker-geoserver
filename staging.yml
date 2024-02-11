@@ -18,7 +18,7 @@ services:
     - ${GS_HTTP_PORT}:8080
     volumes:
     - tomcat:/usr/local/tomcat
-    - geoserver:/usr/local/tomcat/webapps/geoserver
+    - geoserver:/usr/local/tomcat/webapps/geoserver/data
 
 volumes:
   tomcat:

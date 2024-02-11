@@ -1,4 +1,4 @@
-ARG TOMCAT_VERSION=9.0-jdk11-temurin-focal
+ARG TOMCAT_VERSION=9.0.85-jdk11-temurin-focal
 
 FROM tomcat:$TOMCAT_VERSION AS tomcat
 
@@ -15,12 +15,13 @@ RUN apt-get install -y \
     unzip
 
 FROM tomcat AS tmp_image_geoserver
-ARG GS_VERSION=2.24.1
+ARG GS_VERSION=2.24.2
 
 ## Download Geoserver
 COPY scripts/download-geoserver.sh ./download-geoserver.sh
 RUN chmod +x download-geoserver.sh
 RUN ./download-geoserver.sh
+
 ## Download extensions
 COPY scripts/download-extensions.sh ./download-extensions.sh
 RUN chmod +x download-extensions.sh
@@ -69,14 +70,14 @@ ENV GS_INITIAL_MEMORY=$GS_INITIAL_MEMORY \
 COPY ./scripts/start-geoserver.sh ./
 RUN chmod +x start-geoserver.sh
 
-EXPOSE $GS_HTTP_PORT
-
 ## Remove demo data
-ARG GS_DEMO_DATA=True
+ARG GS_DEMO_DATA=False
 ENV GS_DEMO_DATA=$GS_DEMO_DATA
 COPY scripts/demo-data.sh ./
 RUN chmod +x demo-data.sh
 RUN ./demo-data.sh
+
+EXPOSE $GS_HTTP_PORT
 
 # FOR TEST ONLY
 #ENTRYPOINT ["/bin/bash"]
