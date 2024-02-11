@@ -2,9 +2,9 @@
 
 The latest version of this image use the latest stable version of Geoserver
 
-On 01-01-2024:
+On 11-02-2024:
 
-- Geoserver stable version: [2.24.1](https://geoserver.org/download/)
+- Geoserver stable version: [2.24.2](https://geoserver.org/download/)
 
 Since 01-01-2024 the image's tag system follow the official Geoserver's versions tag.
 
