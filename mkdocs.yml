@@ -8,6 +8,8 @@ theme: readthedocs
 nav:
     - Home: 'index.md'
     - User Guide:
+        - Release Policy: './guides/release-policy.md'
+        - Runtime Surfaces: './guides/runtime-surfaces.md'
         - NGINX-Certbot: './guides/nginx-certbot.md'
         - Extensions: './guides/geoserver-extension.md'
         - Manage datadir: './guides/manage-datadir.md'

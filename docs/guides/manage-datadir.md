@@ -1,24 +1,25 @@
-# Use earlier folder
-0. Put down Geoserver:
+# Restore an Earlier Data Directory
 
-        docker-compose -f docker-compose.yml down
+0. Put down GeoServer:
 
-1. Delete `datadir`:
+        docker compose -f staging.yml down
 
-        rm -rf /var/lib/docker/volumes/geoserver-drako_geoserver/_data/data
+1. Find the current data volume mountpoint:
 
-2. Create `datadir`:
+        docker volume inspect docker-geoserver_main_geoserver
 
-        mkdir data
+2. Delete the current content inside the mounted volume path returned by Docker:
 
-3. Copy all data from earlier folder to `datadir`:
+        rm -rf MOUNTPOINT/*
 
-        cp -r EARLIER_FOLDER_NAME/* /var/lib/docker/volumes/geoserver-drako_geoserver/_data/data
-   
-4. Change `datadir` ownership:
+3. Copy the earlier data directory into that mountpoint:
 
-        chown -R USERNAME:USERNAME datadir/
-   
-5. Put UP Geoserver:
+        cp -r EARLIER_FOLDER_NAME/* MOUNTPOINT/
 
-        docker-compose -f docker-compose.yml up -d
+4. Change ownership if your local setup requires it:
+
+        chown -R USERNAME:USERNAME MOUNTPOINT/
+
+5. Put up GeoServer again:
+
+        docker compose -f staging.yml up -d

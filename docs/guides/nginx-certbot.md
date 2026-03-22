@@ -4,21 +4,25 @@ If Apache2 is up, it's necessary to put it down.
 Check Apache2 status: `sudo systemctl status apache2`
 Stop Apache2: `sudo systemctl stop apache2`
 
-
 ## Create an SSL certificate with Certbot
 
-Enter to the image that use nginx:
+Start the NGINX stack:
 
-    docker exec -it <nginx_img_id> bin/bash
+    docker compose -f staging-nginx.yml up -d --build
+
+Enter the nginx service:
+
+    docker compose -f staging-nginx.yml exec nginx bash
 
 Make certificate:
 
     certbot --nginx -d domain.com -d www.domain.com
 
-Put down Geoserver and NGINX, then edit `WEB-INF/web.xml`. Uncomment `PROXY_BASE_URL` and add your domain: `https://example.com/geoserver`.
-Uncomment `GEOSERVER_CSRF_WHITELIST` and add your domain without http: `example.com`.
+For the current `2.24.2` release path, the active reverse-proxy behavior lives in `staging-nginx.yml` and `nginx/files/geoserver.conf`. The tracked `files/geoserver/web.xml` overlay is not copied into the current image build, so this guide does not rely on repository-managed `GEOSERVER_CSRF_WHITELIST` edits.
 
-Put up Geoserver and NGINX, go to `example.com`
+Runtime validation on 2026-03-22 confirmed that the bundled GeoServer WAR still contains a `PROXY_BASE_URL` entry, but this repository does not currently manage that file through the tracked overlay path.
+
+If you need custom GeoServer proxy-base or CSRF behavior beyond the current NGINX setup, handle it in a dedicated configuration proposal before release.
 
 ## Renew SSL certificate
 

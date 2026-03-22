@@ -1,5 +1,3 @@
-version: '3.7'
-
 services:
   geoserver:
     image: maxdragonheart/staging-geoserver:${GS_VERSION}

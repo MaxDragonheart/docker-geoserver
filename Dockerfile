@@ -43,12 +43,16 @@ COPY --from=tmp_image_geoserver $CATALINA_HOME/plugins $GEOSERVER_HOME/WEB-INF/l
 WORKDIR $GEOSERVER_HOME
 
 FROM geoserver AS geoserver-production
+ARG GS_VERSION=2.24.2
 ARG GS_HTTP_PORT=8080
-ENV GS_HTTP_PORT=$GS_HTTP_PORT
+ENV GS_VERSION=$GS_VERSION \
+    GS_HTTP_PORT=$GS_HTTP_PORT
 
+# Reference-only in the 2.24.2 release path. Re-enable only with a dedicated config proposal.
 #COPY files/tomcat/context.xml $CATALINA_HOME/webapps/manager/META-INF
 COPY files/tomcat/tomcat-users.xml $CATALINA_HOME/conf
 COPY files/tomcat/web.xml $CATALINA_HOME/conf
+# Reference-only in the 2.24.2 release path. Re-enable only with a dedicated config proposal.
 #COPY files/geoserver/web.xml $CATALINA_HOME/webapps/geoserver/WEB-INF
 
 ## Global variables affecting WMS | https://docs.geoserver.org/latest/en/user/services/wms/global.html#wms-global-variables

@@ -1,6 +1,6 @@
 # Geoserver Docker Image
 
-[Geoserver](https://geoserver.org/) runs on port 8300 as default with minimum 2GB and maximum 4GB  of RAM.
+[Geoserver](https://geoserver.org/) is currently released from this repository on the `2.24.2` line. The current release target is `dg2.24.2-r2026.1`.
 
 ## Credentials
 
@@ -23,19 +23,21 @@ Password: `geoserver`
 ## Run project
 Use `.env` to customize your version:
 ```
-GS_VERSION=2.20.4
+GS_VERSION=2.24.2
 GS_DEMO_DATA=False
-GS_HTTP_PORT=8300
-GS_INITIAL_MEMORY=1G
-GS_MAXIMUM_MEMORY=4G
-TOMCAT_MAJOR=9
-TOMCAT_MINOR=0
-TOMCAT_PATCH=67
+GS_HTTP_PORT=8600
+GS_INITIAL_MEMORY=2G
+GS_MAXIMUM_MEMORY=6G
 ```
 
-Build: `docker-compose -f docker-compose.yml up -d --build`
+Base stack: `docker compose -f staging.yml up -d --build`
 
-Build for Compose 1.2: `docker compose -f docker-compose.yml up -d --build`
+NGINX stack: `docker compose -f staging-nginx.yml up -d --build`
+
+## Release Readiness
+
+- Release policy: `docs/guides/release-policy.md`
+- Runtime/config surface map: `docs/guides/runtime-surfaces.md`
 
 ## Official Geoserver Documentation
 - [Extensions list](https://docs.geoserver.org/latest/en/user/extensions/index.html#extensions)

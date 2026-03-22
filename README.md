@@ -1,12 +1,8 @@
 # Geoserver Docker Image
 
-The latest version of this image use the latest stable version of Geoserver
+Current release line: `dg2.24.2-r2026.1`
 
-On 11-02-2024:
-
-- Geoserver stable version: [2.24.2](https://geoserver.org/download/)
-
-Since 01-01-2024 the image's tag system follow the official Geoserver's versions tag.
+This repository currently targets GeoServer `2.24.2`. Release-readiness work for the `dg2.24.2-r2026.1` line is intentionally separate from the future proposal that will jump to a newer upstream stable series.
 
 ## Credentials
 
@@ -30,17 +26,33 @@ Password: `geoserver`
 ## Run project
 Use `.env` to customize your version:
 ```
-GS_VERSION=2.20.4
+GS_VERSION=2.24.2
 GS_DEMO_DATA=False
-GS_INITIAL_MEMORY=1G
-GS_MAXIMUM_MEMORY=4G
+GS_INITIAL_MEMORY=2G
+GS_MAXIMUM_MEMORY=6G
 GS_HTTP_PORT=8600
 ```
 
-Build for Compose: `docker compose -f docker-compose.yml up -d --build`
+Base stack: `docker compose -f staging.yml up -d --build`
 
-### Active PROXY_BASE_URL and GEOSERVER_CSRF_WHITELIST
-Edit `web.xml` using the right PROXY_BASE_URL and GEOSERVER_CSRF_WHITELIST. After the edit use `docker compose -f docker_compose_file.yml restart`.
+NGINX stack: `docker compose -f staging-nginx.yml up -d --build`
+
+## Release Policy
+
+Primary release tags follow `dg<geoserver-version>-r<year>.<revision>`.
+
+Current example:
+
+- `dg2.24.2-r2026.1`
+
+See `docs/guides/release-policy.md` for the release flow and validation checklist.
+
+## Active Configuration Notes
+
+- `files/tomcat/tomcat-users.xml` and `files/tomcat/web.xml` are active in the current image build.
+- `files/geoserver/web.xml` and `files/tomcat/context.xml` are tracked but intentionally inactive in the current `2.24.2` release path.
+- `files/geoserver/extensions.txt` is a reference list only. The active extension source of truth is `scripts/download-extensions.sh`.
+- The current NGINX path is driven by `staging-nginx.yml` and `nginx/files/geoserver.conf`.
 
 ## Official Geoserver Documentation
 - [Extensions list](https://docs.geoserver.org/latest/en/user/extensions/index.html#extensions)

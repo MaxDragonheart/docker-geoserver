@@ -13,18 +13,18 @@
 - [INSPIRE](https://docs.geoserver.org/stable/en/user/extensions/inspire/index.html)
 
 ## Install another extension
-0. Put down Geoserver:
 
-        docker-compose -f docker-compose-dev.yml down
+For the current `2.24.2` release path, extensions are baked into the image during build time. The active source of truth is `scripts/download-extensions.sh`.
 
-1. Copy `.jar` into plugin's folder:
+`files/geoserver/extensions.txt` is a reference list only and is not consumed by the current build.
 
-         cp -R DOWNLOAD_FOLDER/* /var/lib/docker/volumes/geoserver-drako_geoserver-plugin/_data/lib
+To add another extension:
 
-2. Change `lib` ownership:
+1. Add the extension download URL to `scripts/download-extensions.sh`.
+2. Rebuild the image:
 
-        chown -R USERNAME:USERNAME lib/
+        docker compose -f staging.yml build geoserver
 
-3. Put UP Geoserver:
+3. Restart the stack:
 
-        docker-compose -f docker-compose-dev.yml up -d
+        docker compose -f staging.yml up -d

@@ -1,16 +1,21 @@
 # Docker Hub
+
 ## Login to Docker Hub
 
 `docker login`
 
-## Push new images
+## Build a Release Image
 
-Build: `docker build -t maxdragonheart/geoserver:<TAG> .`
+Build: `docker build --build-arg GS_VERSION=2.24.2 --build-arg GS_DEMO_DATA=False -t maxdragonheart/geoserver:dg2.24.2-r2026.1 .`
 
-Push: `docker push maxdragonheart/geoserver:<TAG>`
+## Push the Primary Release Tag
 
-## Rename image's TAG to latest
+Push: `docker push maxdragonheart/geoserver:dg2.24.2-r2026.1`
 
-Rename: `docker tag maxdragonheart/geoserver:<TAG> maxdragonheart/geoserver:latest`
+## Optional Alias Tags
 
-Push: `docker push maxdragonheart/geoserver:latest`
+Tag: `docker tag maxdragonheart/geoserver:dg2.24.2-r2026.1 maxdragonheart/geoserver:2.24.2`
+
+Push: `docker push maxdragonheart/geoserver:2.24.2`
+
+See `guides/release-policy.md` for the release rules and validation checklist.

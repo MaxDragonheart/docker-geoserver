@@ -1,3 +1,4 @@
+# Reference list only. The current 2.24.2 build uses scripts/download-extensions.sh as the source of truth.
 # List of Geoserver useful extensions | https://docs.geoserver.org/latest/en/user/extensions/index.html#extensions
 http://sourceforge.net/projects/geoserver/files/GeoServer/2.20.1/extensions/geoserver-2.20.1-gdal-plugin.zip
 http://sourceforge.net/projects/geoserver/files/GeoServer/2.20.1/extensions/geoserver-2.20.1-jp2k-plugin.zip
